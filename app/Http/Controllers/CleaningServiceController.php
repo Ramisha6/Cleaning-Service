@@ -84,7 +84,7 @@ class CleaningServiceController extends Controller
 
     public function delete($id)
     {
-        $data = CleaningService::find($id);
+        $data = CleaningService::findOrFail($id);
 
         if (file_exists(base_path('public/' . $data->service_image))) {
             unlink(base_path('public/' . $data->service_image));
