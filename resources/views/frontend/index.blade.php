@@ -120,7 +120,7 @@
     </section>
     <!-- Slider Area End -->
 
-    
+
     <!-- Service Area  -->
     <section class="vs-service__layout1 space position-relative">
         <div class="container custome-space-bottom">
@@ -135,121 +135,32 @@
             </div>
             <div class="row vs-carousel" data-slide-show="4" data-ml-slide-show="3" data-lg-slide-show="3"
                 data-md-slide-show="2" data-autoplay="true" data-arrows="true">
-                <div class="col-lg-3 wow animate__fadeInUp" data-wow-delay="0.25s">
-                    <div class="vs-service__style1">
-                        <div class="vs-service__img">
-                            <a href="">
-                                <img src="{{ asset('frontend/assets/img/service/service-img-1-1.jpg') }}"
-                                    alt="Serevice Image">
-                            </a>
-                        </div>
-                        <div class="vs-service__body">
-                            <div class="vs-service__header">
-                                <div class="vs-service__content">
-                                    <p class="vs-service__subtitle">cleaning 01</p>
-                                    <h2 class="vs-service__title h6"><a href="">home service</a></h2>
-                                </div>
-                                <div class="vs-service__icon">
-                                    <img src="{{ asset('frontend/assets/img/icon/service-icon-1-1.svg') }}"
-                                        alt="Service Icon">
-                                </div>
+                @foreach ($services as $key => $service)
+                    <div class="col-lg-3 wow animate__fadeInUp" data-wow-delay="0.25s">
+                        <div class="vs-service__style1">
+                            <div class="vs-service__img">
+                                <a href="">
+                                    <img src="{{ asset('frontend/assets/img/service/service-img-1-1.jpg') }}"
+                                        alt="Serevice Image">
+                                </a>
                             </div>
-                            <p class="vs-service__text">aweep & mopsd vacuum floor House Cleaners.</p>
+                            <div class="vs-service__body">
+                                <div class="vs-service__header">
+                                    <div class="vs-service__content">
+                                        <p class="vs-service__subtitle">cleaning 01</p>
+                                        <h2 class="vs-service__title h6"><a
+                                                href="">{{ $service->service_title }}</a></h2>
+                                    </div>
+                                    <div class="vs-service__icon">
+                                        <img src="{{ asset('frontend/assets/img/icon/service-icon-1-1.svg') }}"
+                                            alt="Service Icon">
+                                    </div>
+                                </div>
+                                <p class="vs-service__text">{{ $service->service_short_description }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 wow animate__fadeInUp" data-wow-delay="0.45s">
-                    <div class="vs-service__style1">
-                        <div class="vs-service__img">
-                            <a href="">
-                                <img src="{{ asset('frontend/assets/img/service/service-img-1-2.jpg') }}"
-                                    alt="Serevice Image">
-                            </a>
-                        </div>
-                        <div class="vs-service__body">
-                            <div class="vs-service__header">
-                                <div class="vs-service__content">
-                                    <p class="vs-service__subtitle">cleaning 01</p>
-                                    <h2 class="vs-service__title h6"><a href="">Kitchen Clean</a></h2>
-                                </div>
-                                <div class="vs-service__icon">
-                                    <img src="{{ asset('frontend/assets/img/icon/service-icon-1-2.svg') }}"
-                                        alt="Service Icon">
-                                </div>
-                            </div>
-                            <p class="vs-service__text">aweep & mopsd vacuum floor House Cleaners.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 wow animate__fadeInUp" data-wow-delay="0.65s">
-                    <div class="vs-service__style1">
-                        <div class="vs-service__img">
-                            <a href="">
-                                <img src="{{ asset('frontend/assets/img/service/service-img-1-3.jpg') }}"
-                                    alt="Serevice Image">
-                            </a>
-                        </div>
-                        <div class="vs-service__body">
-                            <div class="vs-service__header">
-                                <div class="vs-service__content">
-                                    <p class="vs-service__subtitle">cleaning 01</p>
-                                    <h2 class="vs-service__title h6"><a href="">Purification</a></h2>
-                                </div>
-                                <div class="vs-service__icon">
-                                    <img src="{{ asset('frontend/assets/img/icon/service-icon-1-3.svg') }}"
-                                        alt="Service Icon">
-                                </div>
-                            </div>
-                            <p class="vs-service__text">aweep & mopsd vacuum floor House Cleaners.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 wow animate__fadeInUp" data-wow-delay="0.85s">
-                    <div class="vs-service__style1">
-                        <div class="vs-service__img">
-                            <a href="">
-                                <img src="{{ asset('frontend/assets/img/service/service-img-1-4.jpg') }}"
-                                    alt="Serevice Image">
-                            </a>
-                        </div>
-                        <div class="vs-service__body">
-                            <div class="vs-service__header">
-                                <div class="vs-service__content">
-                                    <p class="vs-service__subtitle">cleaning 01</p>
-                                    <h2 class="vs-service__title h6"><a href="">Bed & Mattres</a></h2>
-                                </div>
-                                <div class="vs-service__icon">
-                                    <img src="{{ asset('frontend/assets/img/icon/service-icon-1-4.svg') }}"
-                                        alt="Service Icon">
-                                </div>
-                            </div>
-                            <p class="vs-service__text">aweep & mopsd vacuum floor House Cleaners.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 wow animate__fadeInUp" data-wow-delay="0.95s">
-                    <div class="vs-service__style1">
-                        <div class="vs-service__img">
-                            <a href="">
-                                <img src="{{ asset('frontend/assets/img/service/service-img-1-5.jpg') }}"
-                                    alt="Serevice Image">
-                            </a>
-                        </div>
-                        <div class="vs-service__body">
-                            <div class="vs-service__header">
-                                <div class="vs-service__content">
-                                    <p class="vs-service__subtitle">cleaning 01</p>
-                                    <h2 class="vs-service__title h6"><a href="">House Clean</a></h2>
-                                </div>
-                                <div class="vs-service__icon">
-                                    <img src="{{ asset('frontend/assets/img/icon/service-icon-1-4.svg') }}"
-                                        alt="Service Icon">
-                                </div>
-                            </div>
-                            <p class="vs-service__text">aweep & mopsd vacuum floor House Cleaners.</p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
         <span class="shape-mockup z-index-n1 d-xl-block d-none" style="right: 0; top: 0px;"><img

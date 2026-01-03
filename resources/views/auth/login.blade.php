@@ -18,16 +18,18 @@
     <link rel="icon" href="{{ asset('frontend/assets/img/favicon.ico') }}" type="image/x-icon">
 
     <!--==============================
-	  Google Fonts
-	============================== -->
+ Google Fonts
+ ============================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&amp;family=Poppins:wght@400;500;600;700;800&amp;family=Rubik:ital,wght@0,300..900;1,300..900&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&amp;family=Poppins:wght@400;500;600;700;800&amp;family=Rubik:ital,wght@0,300..900;1,300..900&amp;display=swap"
+        rel="stylesheet">
 
 
     <!--==============================
-	    All CSS File
-	============================== -->
+ All CSS File
+ ============================== -->
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
     <!-- Fontawesome Icon -->
@@ -41,21 +43,21 @@
     <!-- Theme Custom CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/slick.min.css') }}">
     <!-- Theme Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 
 </head>
 
 <body>
 
     <!--********************************
-   		Code Start From Here 
-	******************************** -->
+   Code Start From Here
+ ******************************** -->
 
 
 
     <!--==============================
-	Preloader
-	==============================-->
+ Preloader
+ ==============================-->
     <!-- <div class="preloader">
         <button class="vs-btn preloaderCls">Cancel Preloader </button>
         <div class="preloader-inner">
@@ -110,8 +112,10 @@
                     <div class="col-auto d-md-block d-none">
                         <div class="header-links">
                             <ul>
-                                <li><i class="far fa-envelope"></i><a href="mailto:info@example.com">info@example.com</a></li>
-                                <li class="d-lg-inline d-none"><i class="far fa-clock"></i>Tuesday - Saturday 8:00 Am - 5:00 Pm</li>
+                                <li><i class="far fa-envelope"></i><a
+                                        href="mailto:info@example.com">info@example.com</a></li>
+                                <li class="d-lg-inline d-none"><i class="far fa-clock"></i>Tuesday - Saturday 8:00 Am -
+                                    5:00 Pm</li>
                             </ul>
                         </div>
                     </div>
@@ -184,17 +188,20 @@
                 <div class="col-lg-5 col-md-8">
                     <div class="package-style1 p-5 bg-white shadow-lg rounded">
                         <div class="text-center mb-4">
-                            <img src="{{ asset('frontend/assets/img/logo-dark.png') }}" alt="logo" class="mb-3">
+                            <img src="{{ asset('frontend/assets/img/logo-dark.png') }}" alt="logo"
+                                class="mb-3">
                         </div>
                         <form method="POST" action="{{ route('login') }}" class="form-group">
                             @csrf
                             <div class="mb-3">
                                 <label>Email Address</label>
-                                <input type="email" class="form-control border-theme" name="email" placeholder="Enter Email" required>
+                                <input type="email" class="form-control border-theme" name="email"
+                                    placeholder="Enter Email" required>
                             </div>
                             <div class="mb-3">
                                 <label>Password</label>
-                                <input type="password" class="form-control border-theme" name="password" placeholder="Password" required>
+                                <input type="password" class="form-control border-theme" name="password"
+                                    placeholder="Password" required>
                             </div>
                             <div class="d-flex justify-content-between mb-4">
                                 <div>
@@ -204,7 +211,8 @@
                             </div>
                             <button type="submit" class="vs-btn2 w-100 p-2">Login Now</button>
                         </form>
-                        <p class="text-center mt-4">Don't have an account? <a href="/register" class="text-theme">Register Here</a></p>
+                        <p class="text-center mt-4">Don't have an account? <a href="/register"
+                                class="text-theme">Register Here</a></p>
                     </div>
                 </div>
             </div>
@@ -213,23 +221,27 @@
 
 
     <!--==============================
-			Footer Area
-	==============================-->
+   Footer Area
+ ==============================-->
     <footer class="footer-wrapper  footer-layout1">
-        <div class="widget-area position-relative" data-bg-src="{{ asset('frontend/assets/img/bg/footer-bg-1-1.jpg') }}">
+        <div class="widget-area position-relative"
+            data-bg-src="{{ asset('frontend/assets/img/bg/footer-bg-1-1.jpg') }}">
             <div class="container">
                 <div class="row g-4 justify-content-xl-center">
                     <div class="col-xl-4 col-md-6">
                         <div class="widget footer-widget">
                             <div class="vs-widget-about">
                                 <div class="footer-logo">
-                                    <a href="index.html"><img src="{{ asset('frontend/assets/img/logo-white.png') }}" alt="logo"></a>
+                                    <a href="index.html"><img src="{{ asset('frontend/assets/img/logo-white.png') }}"
+                                            alt="logo"></a>
                                 </div>
                                 <p class="footer-text">
                                     provide detailed house cleaning sanitizing services for valued clients.
                                 </p>
                                 <div class="contact-box">
-                                    <span class="icon"><img src="{{ asset('frontend/assets/img/icon/call-icon.svg') }}" alt="icon"></span>
+                                    <span class="icon"><img
+                                            src="{{ asset('frontend/assets/img/icon/call-icon.svg') }}"
+                                            alt="icon"></span>
                                     <div class="contact-content">
 
                                         <h6 class="contact-title"><a href="#">01300586763</a></h6>
@@ -269,28 +281,40 @@
                             <h3 class="widget_title">Instagram</h3>
                             <div class="sidebar-gallery">
                                 <div class="gallery-thumb">
-                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-1.jpg') }}" alt="Gallery Image" class="w-100">
-                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-1.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-1.jpg') }}"
+                                        alt="Gallery Image" class="w-100">
+                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-1.jpg') }}"
+                                        class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                                 </div>
                                 <div class="gallery-thumb">
-                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-2.jpg') }}" alt="Gallery Image" class="w-100">
-                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-2.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-2.jpg') }}"
+                                        alt="Gallery Image" class="w-100">
+                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-2.jpg') }}"
+                                        class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                                 </div>
                                 <div class="gallery-thumb">
-                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-3.jpg') }}" alt="Gallery Image" class="w-100">
-                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-3.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-3.jpg') }}"
+                                        alt="Gallery Image" class="w-100">
+                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-3.jpg') }}"
+                                        class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                                 </div>
                                 <div class="gallery-thumb">
-                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-4.jpg') }}" alt="Gallery Image" class="w-100">
-                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-4.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-4.jpg') }}"
+                                        alt="Gallery Image" class="w-100">
+                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-4.jpg') }}"
+                                        class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                                 </div>
                                 <div class="gallery-thumb">
-                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-5.jpg') }}" alt="Gallery Image" class="w-100">
-                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-5.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-5.jpg') }}"
+                                        alt="Gallery Image" class="w-100">
+                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-5.jpg') }}"
+                                        class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                                 </div>
                                 <div class="gallery-thumb">
-                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-6.jpg') }}" alt="Gallery Image" class="w-100">
-                                    <a href="{{ asset(('frontend/assets/img/gallery/gallery-img-1-6.jpg')) }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                    <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-6.jpg') }}"
+                                        alt="Gallery Image" class="w-100">
+                                    <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-6.jpg') }}"
+                                        class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -306,7 +330,8 @@
             <div class="container">
                 <div class="row justify-content-xl-between justify-content-center align-items-center">
                     <div class="col-auto">
-                        <p class="copyright-text"><i class="fal fa-copyright"></i> Copyright 2025 - <a href="index.html">Smart Clean</a> All rights reserved.</p>
+                        <p class="copyright-text"><i class="fal fa-copyright"></i> Copyright 2025 - <a
+                                href="index.html">Smart Clean</a> All rights reserved.</p>
                     </div>
                     <div class="col-auto">
                         <div class="copyright-img">
@@ -328,8 +353,8 @@
     </button>
 
     <!--********************************
-			Code End  Here 
-	******************************** -->
+   Code End  Here
+ ******************************** -->
 
     <!--==============================
         All Js File
@@ -341,23 +366,23 @@
     <!-- Bootstrap -->
     <script src="{{ asset('frontend/assets/js/bootstrap.min.js') }}"></script>
     <!-- Magnific Popup -->
-    <script src="{{ asset('frontend/assets/js/jquery.magnific-popup.min.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/jquery.magnific-popup.min.js') }}"></script>
     <!-- imagesloaded -->
-    <script src="{{ asset('frontend/assets/js/imagesloaded.pkgd.min.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/imagesloaded.pkgd.min.js') }}"></script>
     <!-- Gsap -->
-    <script src="{{ asset('frontend/assets/js/gsap.min.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/gsap.min.js') }}"></script>
     <!-- ScrollTrigger -->
-    <script src="{{ asset('frontend/assets/js/ScrollTrigger.min.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/ScrollTrigger.min.js') }}"></script>
     <!-- Gsap ScrollTo Plugin -->
-    <script src="{{ asset('frontend/assets/js/gsap-scroll-to-plugin.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/gsap-scroll-to-plugin.js') }}"></script>
     <!-- Split Text -->
-    <script src="{{ asset('frontend/assets/js/SplitText.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/SplitText.js') }}"></script>
     <!-- lenis -->
-    <script src="{{ asset('frontend/assets/js/lenis.min.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/lenis.min.js') }}"></script>
     <!-- wow js -->
-    <script src="{{ asset('frontend/assets/js/wow.min.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/wow.min.js') }}"></script>
     <!-- Main Js File -->
-    <script src="{{ asset('frontend/assets/js/main.js')}}"></script>
+    <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
 
 
 </body>

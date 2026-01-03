@@ -1,17 +1,24 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CleaningServiceController;
 use App\Http\Controllers\ProfileController;
 use App\Models\CleaningService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('frontend.index');
+    $services = CleaningService::all();
+    return view('frontend.index', compact('services'));
 });
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.index');
+Route::get('/admin/login', function () {
+    return view('admin.login');
 });
+
+Route::post('/login-store', [AdminController::class, 'store'])->name('admin.login.store');
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -25,9 +32,17 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
- Route::get('/admin/service/list', [CleaningServiceController::class, 'index'])->name('admin.Service.list');
- Route::get('/admin/service/add', [CleaningServiceController::class, 'create'])->name('admin.Service.add');
- Route::post('/admin/service/store', [CleaningServiceController::class, 'store'])->name('admin.Service.store');
- Route::get('/admin/service/edit/{id}', [CleaningServiceController::class, 'edit'])->name('admin.Service.edit');
- Route::post('/admin/service/update', [CleaningServiceController::class, 'update'])->name('admin.Service.update');
- Route::get('/admin/service/delete/{id}', [CleaningServiceController::class, 'delete'])->name('admin.Service.delete');
+Route::middleware('auth')->group(function () {
+
+    Route::get('/admin/dashboard', function () {
+        $admin_data = Auth::user();
+        return view('admin.index', compact('admin_data'));
+    })->name('admin.dashboard');
+
+    Route::get('/admin/service/list', [CleaningServiceController::class, 'index'])->name('admin.Service.list');
+    Route::get('/admin/service/add', [CleaningServiceController::class, 'create'])->name('admin.Service.add');
+    Route::post('/admin/service/store', [CleaningServiceController::class, 'store'])->name('admin.Service.store');
+    Route::get('/admin/service/edit/{id}', [CleaningServiceController::class, 'edit'])->name('admin.Service.edit');
+    Route::post('/admin/service/update/{id}', [CleaningServiceController::class, 'update'])->name('admin.Service.update');
+    Route::get('/admin/service/delete/{id}', [CleaningServiceController::class, 'delete'])->name('admin.Service.delete');
+});
