@@ -6,7 +6,9 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="./">Home</a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.Service.add') }}">Service Add</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Back</li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="{{ url()->previous() }}">Back</a>
+            </li>
         </ol>
     </div>
 
@@ -25,9 +27,9 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>SN</th>
+                                <th>Image</th>
                                 <th>Title</th>
                                 <th>Price</th>
-                                <th>Image</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -37,19 +39,21 @@
                             @foreach ($service_list as $key => $service)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    <td>
+                                        <img src="{{ !empty($service->service_image) ? url('upload/service_image/' . $service->service_image) : url('upload/no_image.jpg') }}" alt="{{ $service->service_title }}" class="img-fluid d-block" style="width: 150px;">
+                                    </td>
                                     <td>{{ $service->service_title }}</td>
                                     <td>{{ $service->service_price }}</td>
                                     <td>
-                                        <img src="{{ asset($service->service_image) }}" width="100"
-                                            alt="{{ $service->service_title }}">
+                                        @if ($service->service_status == 'active')
+                                            <span class="badge badge-success">Active</span>
+                                        @else
+                                            <span class="badge badge-danger">Inactive</span>
+                                        @endif
                                     </td>
-                                    <td><span class="badge badge-success">{{ $service->service_status }}</span></td>
                                     <td>
-                                        <a href="{{ route('admin.Service.edit', $service->id) }}"
-                                            class="btn btn-sm btn-info">Edit</a>
-                                        <a href="{{ route('admin.Service.delete', $service->id) }}"
-                                            class="btn btn-sm btn-danger"
-                                            onclick="confirmDelete({{ $service->id }})">Delete</a>
+                                        <a href="{{ route('admin.Service.edit', $service->id) }}" class="btn btn-sm btn-info">Edit</a>
+                                        <a href="{{ route('admin.Service.delete', $service->id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
                                     </td>
                                 </tr>
                             @endforeach

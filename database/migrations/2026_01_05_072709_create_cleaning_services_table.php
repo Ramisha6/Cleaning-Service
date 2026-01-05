@@ -9,12 +9,12 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void
-    {xml_parser_create()
+    {
         Schema::create('cleaning_services', function (Blueprint $table) {
             $table->id();
             $table->string('service_image');
             $table->string('service_title');
-            $table->string('slug')->unique();
+            $table->string('service_slug')->unique();
             $table->string('service_price');
             $table->mediumText('service_short_description');
             $table->longText('service_long_description');

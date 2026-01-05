@@ -25,16 +25,13 @@
                                     <form class="user" method="POST" action="{{ route('admin.login.store') }}">
                                         @csrf
                                         <div class="form-group">
-                                            <input type="email" class="form-control" id="email" name="email"
-                                                placeholder="Enter Email Address">
+                                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control" name="password" id="password"
-                                                placeholder="Password">
+                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
                                         </div>
                                         <div class="form-group">
-                                            <div class="custom-control custom-checkbox small"
-                                                style="line-height: 1.5rem;">
+                                            <div class="custom-control custom-checkbox small" style="line-height: 1.5rem;">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck">
                                                 <label class="custom-control-label" for="customCheck">Remember
                                                     Me</label>

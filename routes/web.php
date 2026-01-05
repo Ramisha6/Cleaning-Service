@@ -3,12 +3,12 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CleaningServiceController;
 use App\Http\Controllers\ProfileController;
-use App\Models\CleaningService;
+use App\Models\CleaningServices;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $services = CleaningService::all();
+    $services = CleaningServices::all();
     return view('frontend.index', compact('services'));
 });
 

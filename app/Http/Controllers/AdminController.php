@@ -11,7 +11,7 @@ class AdminController extends Controller
     {
         // 1️⃣ Validate input
         $credentials = $request->validate([
-            'email'    => ['required', 'email'],
+            'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
@@ -19,14 +19,14 @@ class AdminController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()
-                ->route('admin.dashboard')
-                ->with('success', 'Login successful');
+            return redirect()->route('admin.dashboard')->with('success', 'Login successful');
         }
 
         // 3️⃣ Login failed
-        return back()->withErrors([
-            'email' => 'Invalid email or password.',
-        ])->withInput();
+        return back()
+            ->withErrors([
+                'email' => 'Invalid email or password.',
+            ])
+            ->withInput();
     }
 }

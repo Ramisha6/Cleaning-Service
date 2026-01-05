@@ -17,8 +17,7 @@
     <hr class="sidebar-divider">
 
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseServices"
-            aria-expanded="true" aria-controls="collapseServices">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseServices" aria-expanded="true" aria-controls="collapseServices">
             <i class="fas fa-fw fa-table"></i>
             <span>Services</span>
         </a>

@@ -6,68 +6,73 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="./">Home</a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.Service.list') }}">Service List</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Back</li>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a href="{{ url()->previous() }}">Back</a>
+            </li>
         </ol>
     </div>
 
-
     <div class="row">
-
         <div class="col-lg-12">
-
             <div class="card mb-4">
-
                 <div class="card-body">
 
-                    <form action="{{ route('admin.Service.store') }}" method="post" enctype="multipart/form-data"
-                        autocomplete="off">
+                    @include('widgets.errors')
 
+                    <form action="{{ route('admin.Service.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group">
                             <label>Service Title</label>
-                            <input type="text" class="form-control" name="service_title"
-                                placeholder="Enter cleaning service title" required>
+                            <input type="text" class="form-control @error('service_title') is-invalid @enderror" name="service_title" value="{{ old('service_title') }}">
                         </div>
+
                         <div class="form-group">
                             <label>Service Slug</label>
-                            <input type="text" class="form-control" name="service_slug"
-                                placeholder="Enter cleaning service slug" required>
+                            <input type="text" class="form-control @error('service_slug') is-invalid @enderror" name="service_slug" value="{{ old('service_slug') }}">
                         </div>
 
                         <div class="form-group">
                             <label>Service Price</label>
-                            <input type="text" class="form-control" name="service_price"
-                                placeholder="Enter cleaning service price" required>
+                            <input type="text" class="form-control @error('service_price') is-invalid @enderror" name="service_price" value="{{ old('service_price') }}">
                         </div>
 
                         <div class="form-group">
                             <label>Service Short Description</label>
-                            <textarea class="form-control" name="service_short_description" rows="3" required></textarea>
+                            <textarea class="form-control @error('service_short_description') is-invalid @enderror" name="service_short_description" rows="3">{{ old('service_short_description') }}</textarea>
                         </div>
 
                         <div class="form-group">
                             <label>Service Long Description</label>
-                            <textarea class="form-control summernote" name="service_long_description" rows="5" required></textarea>
+                            <textarea class="form-control summernote @error('service_long_description') is-invalid @enderror" name="service_long_description" rows="5">{{ old('service_long_description') }}</textarea>
                         </div>
 
                         <div class="form-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="customFile" name="service_image"
-                                    required>
-                                <label class="custom-file-label" for="customFile">Choose file</label>
-                            </div>
+                            <label>Service Image</label>
+                            <input type="file" class="form-control @error('service_image') is-invalid @enderror" name="service_image" onchange="showImage(this)">
+                            <img id="image" src="" alt="" style="max-width: 100px; margin-top: 10px">
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
 
                     </form>
 
                 </div>
-
             </div>
-
         </div>
-
     </div>
+
+    <script>
+        function showImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#image').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 @endsection
