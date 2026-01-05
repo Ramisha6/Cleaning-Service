@@ -2,14 +2,23 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CleaningServiceController;
+use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Models\CleaningServices;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    $services = CleaningServices::all();
-    return view('frontend.index', compact('services'));
+// #################### Frontend Controller ####################
+Route::middleware('web')->group(function () {
+    // Home
+    Route::get('/', [FrontendController::class, 'Index'])->name('index');
+
+    // Service Page
+    Route::get('/service', [FrontendController::class, 'Service'])->name('service');
+
+    // Service Details
+    Route::get('/service/{slug}', [FrontendController::class, 'ServiceDetails'])->name('service.details');
+
 });
 
 Route::get('/admin/login', function () {

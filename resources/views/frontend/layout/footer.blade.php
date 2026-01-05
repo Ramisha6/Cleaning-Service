@@ -6,16 +6,14 @@
                     <div class="widget footer-widget">
                         <div class="vs-widget-about">
                             <div class="footer-logo">
-                                <a href="/"><img src="{{ asset('frontend/assets/img/logo-white.png') }}"
-                                        alt="logo"></a>
+                                <a href="{{ route('index') }}"><img src="{{ asset('frontend/assets/img/logo-white.png') }}" alt="logo"></a>
                             </div>
                             <p class="footer-text">
                                 We care about cleanliness,hygiene,and your comfort.
                                 Let us keep your space fresh,safe,and spotless.ph
                             </p>
                             <div class="contact-box">
-                                <span class="icon"><img src="{{ asset('frontend/assets/img/icon/call-icon.svg') }}"
-                                        alt="icon"></span>
+                                <span class="icon"><img src="{{ asset('frontend/assets/img/icon/call-icon.svg') }}" alt="icon"></span>
                                 <div class="contact-content">
 
                                     <h6 class="contact-title"><a href="#">01300586763</a></h6>
@@ -55,40 +53,28 @@
                         <h3 class="widget_title">Instagram</h3>
                         <div class="sidebar-gallery">
                             <div class="gallery-thumb">
-                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-1.jpg') }}"
-                                    alt="Gallery Image" class="w-100">
-                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-1.jpg') }}"
-                                    class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-1.jpg') }}" alt="Gallery Image" class="w-100">
+                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-1.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                             </div>
                             <div class="gallery-thumb">
-                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-2.jpg') }}"
-                                    alt="Gallery Image" class="w-100">
-                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-2.jpg') }}"
-                                    class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-2.jpg') }}" alt="Gallery Image" class="w-100">
+                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-2.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                             </div>
                             <div class="gallery-thumb">
-                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-3.jpg') }}"
-                                    alt="Gallery Image" class="w-100">
-                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-3.jpg') }}"
-                                    class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-3.jpg') }}" alt="Gallery Image" class="w-100">
+                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-3.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                             </div>
                             <div class="gallery-thumb">
-                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-4.jpg') }}"
-                                    alt="Gallery Image" class="w-100">
-                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-4.jpg') }}"
-                                    class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-4.jpg') }}" alt="Gallery Image" class="w-100">
+                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-4.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                             </div>
                             <div class="gallery-thumb">
-                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-5.jpg') }}"
-                                    alt="Gallery Image" class="w-100">
-                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-5.jpg') }}"
-                                    class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-5.jpg') }}" alt="Gallery Image" class="w-100">
+                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-5.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                             </div>
                             <div class="gallery-thumb">
-                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-6.jpg') }}"
-                                    alt="Gallery Image" class="w-100">
-                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-6.jpg') }}"
-                                    class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
+                                <img src="{{ asset('frontend/assets/img/gallery/gallery-img-1-6.jpg') }}" alt="Gallery Image" class="w-100">
+                                <a href="{{ asset('frontend/assets/img/gallery/gallery-img-1-6.jpg') }}" class="popup-image gal-btn"><i class="far fa-search-plus"></i></a>
                             </div>
                         </div>
                     </div>

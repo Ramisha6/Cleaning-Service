@@ -32,7 +32,7 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-auto">
                             <div class="header-logo">
-                                <a href="/">
+                                <a href="{{ route('index') }}">
                                     <img src="{{ asset('frontend/assets/img/logo-dark.png') }}" alt="logo">
                                 </a>
                             </div>
@@ -41,7 +41,7 @@
                             <nav class="main-menu menu-style2 d-none d-lg-block">
                                 <ul>
                                     <li class="menu-item-has-children">
-                                        <a href="/">Home</a>
+                                        <a href="{{ route('index') }}">Home</a>
                                     </li>
                                     <li>
                                         <a href="">About Us</a>
@@ -68,17 +68,32 @@
                                     @endphp
 
                                     @if ($user)
-                                        <h6 class="contact-title">
-                                            <form method="POST" action="{{ route('logout') }}">
-                                                @csrf
-                                                <button type="submit" class="text-theme">Logout</button>
-                                            </form>
+                                        <div class="user-dropdown">
+                                            <div class="user-toggle">
+                                                <img src="{{ asset('upload/avatar.png') }}" alt="User Avatar">
+                                                <span>{{ $user->name }}</span>
+                                                <i class="far fa-chevron-down"></i>
+                                            </div>
 
-                                        </h6>
+                                            <div class="user-menu">
+                                                <a href="{{ route('dashboard') }}">
+                                                    <i class="far fa-user-circle"></i> Dashboard
+                                                </a>
+
+                                                <form method="POST" action="{{ route('logout') }}">
+                                                    @csrf
+                                                    <button type="submit">
+                                                        <i class="far fa-sign-out-alt"></i> Logout
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     @else
-                                        <h6 class="contact-title"><a href="/login">Login</a> | </h6>
+                                        <h6 class="contact-title"><a href="/login">Login</a></h6>
+                                        <h6 class="contact-title px-2">|</h6>
                                         <h6 class="contact-title"><a href="/register">Register</a></h6>
                                     @endif
+
                                 </div>
                             </div>
                         </div>
