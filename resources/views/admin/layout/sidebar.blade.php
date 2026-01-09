@@ -1,9 +1,8 @@
 <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
 
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon">
-        </div>
-        <div class="sidebar-brand-text mx-3">Admin Dashboard </div>
+        <div class="sidebar-brand-icon"></div>
+        <div class="sidebar-brand-text mx-3">Admin Dashboard</div>
     </a>
 
     <hr class="sidebar-divider my-0">
@@ -11,49 +10,95 @@
     <li class="nav-item active">
         <a class="nav-link" href="{{ url('/admin/dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span>Dashboard</span>
+        </a>
     </li>
 
     <hr class="sidebar-divider">
 
+    {{-- ================= Services ================= --}}
     @php
         $servicesOpen = request()->routeIs('admin.Service.*');
     @endphp
 
     <li class="nav-item {{ $servicesOpen ? 'active' : '' }}">
-        <a class="nav-link {{ $servicesOpen ? '' : 'collapsed' }} {{ $servicesOpen ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#collapseServices" aria-expanded="{{ $servicesOpen ? 'true' : 'false' }}" aria-controls="collapseServices">
+        <a class="nav-link {{ $servicesOpen ? '' : 'collapsed' }}"
+           href="#"
+           data-toggle="collapse"
+           data-target="#collapseServices"
+           aria-expanded="{{ $servicesOpen ? 'true' : 'false' }}">
             <i class="fas fa-fw fa-table"></i>
             <span>Services</span>
         </a>
 
-        <div id="collapseServices" class="collapse {{ $servicesOpen ? 'show' : '' }}" aria-labelledby="headingTable" data-parent="#accordionSidebar">
+        <div id="collapseServices" class="collapse {{ $servicesOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item {{ request()->routeIs('admin.Service.list') ? 'active' : '' }}" href="{{ route('admin.Service.list') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.Service.list') ? 'active' : '' }}"
+                   href="{{ route('admin.Service.list') }}">
                     Service List
                 </a>
 
-                <a class="collapse-item {{ request()->routeIs('admin.Service.add') ? 'active' : '' }}" href="{{ route('admin.Service.add') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.Service.add') ? 'active' : '' }}"
+                   href="{{ route('admin.Service.add') }}">
                     Add Service
                 </a>
             </div>
         </div>
     </li>
 
+    {{-- ================= Bookings ================= --}}
     @php
         $bookingOpen = request()->routeIs('admin.Booking.*');
     @endphp
 
     <li class="nav-item {{ $bookingOpen ? 'active' : '' }}">
-        <a class="nav-link {{ $bookingOpen ? '' : 'collapsed' }} {{ $bookingOpen ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#collapseBookings" aria-expanded="{{ $bookingOpen ? 'true' : 'false' }}" aria-controls="collapseBookings">
+        <a class="nav-link {{ $bookingOpen ? '' : 'collapsed' }}"
+           href="#"
+           data-toggle="collapse"
+           data-target="#collapseBookings"
+           aria-expanded="{{ $bookingOpen ? 'true' : 'false' }}">
             <i class="fas fa-fw fa-receipt"></i>
             <span>Bookings</span>
         </a>
 
         <div id="collapseBookings" class="collapse {{ $bookingOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item {{ request()->routeIs('admin.Booking.list') ? 'active' : '' }}" href="{{ route('admin.Booking.list') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.Booking.list') ? 'active' : '' }}"
+                   href="{{ route('admin.Booking.list') }}">
                     Booking List
                 </a>
+            </div>
+        </div>
+    </li>
+
+    {{-- ================= Cleaners ================= --}}
+    @php
+        $cleanerOpen = request()->routeIs('admin.cleaner.*');
+    @endphp
+
+    <li class="nav-item {{ $cleanerOpen ? 'active' : '' }}">
+        <a class="nav-link {{ $cleanerOpen ? '' : 'collapsed' }}"
+           href="#"
+           data-toggle="collapse"
+           data-target="#collapseCleaners"
+           aria-expanded="{{ $cleanerOpen ? 'true' : 'false' }}">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Cleaners</span>
+        </a>
+
+        <div id="collapseCleaners" class="collapse {{ $cleanerOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+
+                <a class="collapse-item {{ request()->routeIs('admin.cleaner.list') ? 'active' : '' }}"
+                   href="{{ route('admin.cleaner.list') }}">
+                    Cleaner List
+                </a>
+
+                <a class="collapse-item {{ request()->routeIs('admin.cleaner.add') ? 'active' : '' }}"
+                   href="{{ route('admin.cleaner.add') }}">
+                    Add Cleaner
+                </a>
+
             </div>
         </div>
     </li>

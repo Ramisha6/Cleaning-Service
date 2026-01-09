@@ -72,6 +72,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/booking/invoice/{id}', 'invoice')->name('admin.Booking.invoice');
         Route::get('/admin/booking/invoice/{id}/download', 'invoiceDownload')->name('admin.Booking.invoice.download');
     });
+
+    Route::controller(CleanerController::class)->group(function () {
+        Route::get('/admin/cleaner/list', 'index')->name('admin.cleaner.list');
+        Route::get('/admin/cleaner/add', 'create')->name('admin.cleaner.add');
+        Route::post('/admin/cleaner/store', 'store')->name('admin.cleaner.store');
+        Route::get('/admin/cleaner/edit/{id}', 'edit')->name('admin.cleaner.edit');
+        Route::post('/admin/cleaner/update/{id}', 'update')->name('admin.cleaner.update');
+        Route::get('/admin/cleaner/delete/{id}', 'delete')->name('admin.cleaner.delete');
+    });
 });
 
 // #################### Shared Routes (All authenticated users) ####################
