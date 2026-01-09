@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CleanerController;
 use App\Http\Controllers\CleaningServiceController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
@@ -81,8 +82,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// #################### Auth & Cleaner Login ####################
+Route::get('/cleaner/login', function () {
+    return view('cleaner.login');
+});
+
+Route::post('/cleaner-login-store', [CleanerController::class, 'CleanerLoginStore'])->name('cleaner.login.store');
+
 // -------------------- Cleaner Area (example placeholder) --------------------
 // Add cleaner routes here when you’re ready
 Route::middleware(['auth', 'role:cleaner'])->group(function () {
-    // Route::get('/cleaner/dashboard', ...)->name('cleaner.dashboard');
+    // Cleaner Dashboard
+    Route::get('/cleaner/dashboard', function () {
+        $admin_data = Auth::user();
+        return view('cleaner.index', compact('admin_data'));
+    })->name('cleaner.dashboard');
 });
