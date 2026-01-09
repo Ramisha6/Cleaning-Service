@@ -4,54 +4,71 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CleaningServiceController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
-use App\Models\CleaningServices;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// #################### Frontend Controller ####################
+// #################### Frontend Routes ####################
 Route::middleware('web')->group(function () {
     // Home
     Route::get('/', [FrontendController::class, 'Index'])->name('index');
 
-    // Service Page
+    // Services
     Route::get('/service', [FrontendController::class, 'Service'])->name('service');
 
     // Service Details
     Route::get('/service/{slug}', [FrontendController::class, 'ServiceDetails'])->name('service.details');
 
-    // Service Booking
+    // Booking Store (Guests + Auth users)
     Route::post('/service-booking/store', [FrontendController::class, 'ServiceBookingStore'])->name('service.booking.store');
 });
 
+// #################### Auth & Admin Login ####################
 Route::get('/admin/login', function () {
     return view('admin.login');
 });
 
 Route::post('/login-store', [AdminController::class, 'store'])->name('admin.login.store');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+require __DIR__ . '/auth.php';
 
+// #################### User Dashboard Routes (Only users) ####################
+Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard', [FrontendController::class, 'UserDashboard'])->name('dashboard');
+
     Route::get('/dashboard/service-purchases/{booking}', [FrontendController::class, 'ServicePurchaseShow'])->name('user.service.purchase.show');
     Route::get('/dashboard/service-purchases/{booking}/invoice', [FrontendController::class, 'ServicePurchaseInvoice'])->name('user.service.purchase.invoice');
     Route::get('/dashboard/service-purchases/{booking}/invoice/print', [FrontendController::class, 'ServicePurchaseInvoicePrint'])->name('user.service.purchase.invoice.print');
 });
 
-require __DIR__ . '/auth.php';
-
-Route::middleware('auth')->group(function () {
+// #################### Admin Panel Routes (Only admins) ####################
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Admin Dashboard
     Route::get('/admin/dashboard', function () {
         $admin_data = Auth::user();
         return view('admin.index', compact('admin_data'));
     })->name('admin.dashboard');
 
-    Route::get('/admin/service/list', [CleaningServiceController::class, 'index'])->name('admin.Service.list');
-    Route::get('/admin/service/add', [CleaningServiceController::class, 'create'])->name('admin.Service.add');
-    Route::post('/admin/service/store', [CleaningServiceController::class, 'store'])->name('admin.Service.store');
-    Route::get('/admin/service/edit/{id}', [CleaningServiceController::class, 'edit'])->name('admin.Service.edit');
-    Route::post('/admin/service/update/{id}', [CleaningServiceController::class, 'update'])->name('admin.Service.update');
-    Route::get('/admin/service/delete/{id}', [CleaningServiceController::class, 'delete'])->name('admin.Service.delete');
+    // Service Management
+    Route::controller(CleaningServiceController::class)->group(function () {
+        Route::get('/admin/service/list', 'index')->name('admin.Service.list');
+        Route::get('/admin/service/add', 'create')->name('admin.Service.add');
+        Route::post('/admin/service/store', 'store')->name('admin.Service.store');
+        Route::get('/admin/service/edit/{id}', 'edit')->name('admin.Service.edit');
+        Route::post('/admin/service/update/{id}', 'update')->name('admin.Service.update');
+        Route::get('/admin/service/delete/{id}', 'delete')->name('admin.Service.delete');
+    });
+});
+
+// #################### Shared Routes (All authenticated users) ####################
+Route::middleware('auth')->group(function () {
+    // User profile
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// -------------------- Cleaner Area (example placeholder) --------------------
+// Add cleaner routes here when you’re ready
+Route::middleware(['auth', 'role:cleaner'])->group(function () {
+    // Route::get('/cleaner/dashboard', ...)->name('cleaner.dashboard');
 });
