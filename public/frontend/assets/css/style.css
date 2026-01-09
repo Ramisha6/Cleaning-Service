@@ -489,7 +489,7 @@ select,
 .form-select,
 textarea,
 input {
-  height: 65px;
+  height: 45px;
   padding: 0 45px 0 18px;
   border: 1px solid var(--border-color);
   color: var(--text-color);
@@ -10749,4 +10749,308 @@ blockquote.vs-quote .quote-author {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+.vs-service__img {
+  cursor: pointer;
+}
+
+.vs-service__actions {
+  margin-top: 12px;
+}
+
+.btn-book-now {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 10px 14px;
+  border-radius: 10px;
+
+  background: #063A41;
+  /* your color */
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+
+  border: 1px solid #063A41;
+  transition: all .2s ease;
+
+  width: 100%;
+}
+
+.btn-book-now:hover {
+  background: transparent;
+  color: #109C3D;
+  text-decoration: none;
+  border: 1px solid #109C3D;
+}
+
+.btn-book-now:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(78, 115, 223, .25);
+}
+
+.service-overview__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.service-overview__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .15);
+}
+
+.service-overview__label {
+  opacity: .85;
+  font-weight: 600;
+}
+
+.service-overview__value {
+  font-weight: 700;
+  text-align: right;
+}
+
+.vs-testi__form1 .title-area {
+  margin-bottom: 13px;
+}
+
+.title-area .sec-title {
+  font-size: 30px;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+}
+
+.vs-testi__form1 {
+  padding: 55px 30px;
+  margin-bottom: 45px;
+}
+
+/* overview list inside widget */
+.overview-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.overview-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dashed #e8e8e8;
+}
+
+.overview-list li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.overview-list .k {
+  font-weight: 600;
+  opacity: .85;
+}
+
+.overview-list .v {
+  font-weight: 700;
+  text-align: right;
+}
+
+/* payment list styled like a clean list (standard radios) */
+.payment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.payment-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #fff;
+}
+
+.payment-item input {
+  margin-top: 3px;
+}
+
+.payment-item small {
+  opacity: .7;
+}
+
+.bkash-info {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fff;
+}
+
+/* Fix for widget_categories list when not using normal links */
+.service-overview-list .service-overview-row {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  /* keep it non-clickable */
+  pointer-events: none;
+  cursor: default;
+}
+
+/* left label */
+.service-overview-list .k {
+  font-weight: 600;
+  opacity: .85;
+  white-space: nowrap;
+}
+
+/* right value */
+.service-overview-list .v {
+  font-weight: 700;
+  text-align: right;
+  max-width: 65%;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+/* group */
+.widget .sidebar-btns {
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* base button */
+.widget a.vs-btn.sidebar-btn {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px !important;
+  text-decoration: none !important;
+
+  font-weight: 800;
+  letter-spacing: .2px;
+  line-height: 1;
+}
+
+/* FORCE text color (theme was overriding yours) */
+.widget a.vs-btn.sidebar-btn,
+.widget a.vs-btn.sidebar-btn * {
+  color: #fff !important;
+}
+
+/* solid */
+.widget a.vs-btn.sidebar-btn--solid {
+  background: #16a34a !important;
+  /* green */
+  border: 1px solid rgba(255, 255, 255, .15) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .18);
+}
+
+/* outline */
+.widget a.vs-btn.sidebar-btn--outline {
+  background: transparent !important;
+  border: 2px solid rgba(255, 255, 255, .85) !important;
+  box-shadow: none !important;
+}
+
+/* outline text stays white */
+.widget a.vs-btn.sidebar-btn--outline,
+.widget a.vs-btn.sidebar-btn--outline * {
+  color: #fff !important;
+}
+
+/* hover */
+.widget a.vs-btn.sidebar-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.widget a.vs-btn.sidebar-btn--outline:hover {
+  background: rgba(255, 255, 255, .12) !important;
+}
+
+.widget_content form .form-control {
+  background-color: var(--white-color) !important;
+}
+
+/* Base List Style */
+.payment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+/* The Label Box */
+.payment-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  /* Default border */
+  border-radius: 12px;
+  cursor: pointer;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+
+/* Hide the circular radio button if you want a clean card look,
+       OR keep it. Here I keep it but ensure alignment. */
+.payment-item input {
+  margin-top: 4px;
+  accent-color: #16a34a;
+  /* Green radio color */
+}
+
+/* Text styling */
+.payment-text strong {
+  display: block;
+  color: #1e293b;
+  font-size: 15px;
+}
+
+.payment-text small {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* --- ACTIVE STATE (The Magic Part) --- */
+
+/* When the LI has class 'active', style the label inside it */
+.payment-li.active .payment-item {
+  border-color: #16a34a;
+  /* Green Border */
+  background-color: #f0fdf4;
+  /* Very light green background */
+  box-shadow: 0 0 0 1px #16a34a;
+  /* Make border look thicker */
+}
+
+/* Active payment method highlight */
+.payment-li.active .payment-item {
+  border-color: #16a34a;
+  background: #f0fdf4;
+  box-shadow: 0 0 0 1px #16a34a;
 }

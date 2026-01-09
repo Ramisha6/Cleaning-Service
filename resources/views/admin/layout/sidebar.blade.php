@@ -16,15 +16,25 @@
 
     <hr class="sidebar-divider">
 
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseServices" aria-expanded="true" aria-controls="collapseServices">
+    @php
+        $servicesOpen = request()->routeIs('admin.Service.*');
+    @endphp
+
+    <li class="nav-item {{ $servicesOpen ? 'active' : '' }}">
+        <a class="nav-link {{ $servicesOpen ? '' : 'collapsed' }} {{ $servicesOpen ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#collapseServices" aria-expanded="{{ $servicesOpen ? 'true' : 'false' }}" aria-controls="collapseServices">
             <i class="fas fa-fw fa-table"></i>
             <span>Services</span>
         </a>
-        <div id="collapseServices" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
+
+        <div id="collapseServices" class="collapse {{ $servicesOpen ? 'show' : '' }}" aria-labelledby="headingTable" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.Service.list') }}">Service List</a>
-                <a class="collapse-item" href="{{ route('admin.Service.add') }}">Add Service</a>
+                <a class="collapse-item {{ request()->routeIs('admin.Service.list') ? 'active' : '' }}" href="{{ route('admin.Service.list') }}">
+                    Service List
+                </a>
+
+                <a class="collapse-item {{ request()->routeIs('admin.Service.add') ? 'active' : '' }}" href="{{ route('admin.Service.add') }}">
+                    Add Service
+                </a>
             </div>
         </div>
     </li>

@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('service_title');
             $table->string('service_slug')->unique();
             $table->string('service_price');
+            $table->string('service_duration')->nullable();
             $table->mediumText('service_short_description');
             $table->longText('service_long_description');
             $table->enum('service_status', ['active', 'inactive'])->default('active');

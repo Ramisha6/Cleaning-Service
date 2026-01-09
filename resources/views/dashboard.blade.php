@@ -25,7 +25,7 @@
                                         </a>
 
                                         <a class="nav-link mb-2" data-bs-toggle="pill" href="#orders" role="tab">
-                                            <i class="far fa-shopping-bag"></i> Orders
+                                            <i class="far fa-shopping-bag"></i> Service Purchases
                                         </a>
 
                                         <a class="nav-link mb-2" data-bs-toggle="pill" href="#password" role="tab">

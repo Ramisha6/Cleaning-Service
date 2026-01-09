@@ -29,7 +29,8 @@
                                 <th>SN</th>
                                 <th>Image</th>
                                 <th>Title</th>
-                                <th>Price</th>
+                                <th>Price (৳)</th>
+                                <th>Duration</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -44,6 +45,7 @@
                                     </td>
                                     <td>{{ $service->service_title }}</td>
                                     <td>{{ $service->service_price }}</td>
+                                    <td>{{ $service->service_duration }}</td>
                                     <td>
                                         @if ($service->service_status == 'active')
                                             <span class="badge badge-success">Active</span>

@@ -21,19 +21,30 @@
                                 <img src="{{ !empty($service->service_image) ? url('upload/service_image/' . $service->service_image) : url('upload/no_image.jpg') }}" alt="{{ $service->service_title }}">
                             </a>
                         </div>
+
                         <div class="vs-service__body">
                             <div class="vs-service__header">
                                 <div class="vs-service__content">
                                     <h2 class="vs-service__title h6">
-                                        <a href="{{ route('service.details', $service->service_slug) }}">{{ $service->service_title }}</a>
+                                        <a href="{{ route('service.details', $service->service_slug) }}">
+                                            {{ $service->service_title }}
+                                        </a>
                                     </h2>
                                 </div>
 
                                 <div class="vs-service__price">
-                                    ${{ $service->service_price }} {{-- change $ to your currency --}}
+                                    ৳{{ $service->service_price }}
                                 </div>
                             </div>
+
                             <p class="vs-service__text">{{ $service->service_short_description }}</p>
+
+                            {{-- Book Now button --}}
+                            <div class="vs-service__actions">
+                                <a href="{{ route('service.details', $service->service_slug) }}#book" class="btn-book-now">
+                                    Book Now
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -34,6 +34,7 @@ class CleaningServiceController extends Controller
                 'service_title' => 'required|string|max:255',
                 'service_slug' => 'required|string|max:255|unique:cleaning_services,service_slug',
                 'service_price' => 'required|numeric|min:0',
+                'service_duration' => 'required|string',
                 'service_short_description' => 'required|string',
                 'service_long_description' => 'required|string',
                 'service_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -44,6 +45,7 @@ class CleaningServiceController extends Controller
                 'service_slug.unique' => 'Service slug already exists',
                 'service_price.required' => 'Service price is required',
                 'service_price.numeric' => 'Service price must be numeric',
+                'service_duration.required' => 'Service duration is required',
                 'service_short_description.required' => 'Short description is required',
                 'service_long_description.required' => 'Long description is required',
                 'service_image.required' => 'Service image is required',
@@ -61,6 +63,7 @@ class CleaningServiceController extends Controller
             $service->service_title = $request->service_title;
             $service->service_slug = Str::slug($request->service_slug);
             $service->service_price = $request->service_price;
+            $service->service_duration = $request->service_duration;
             $service->service_short_description = $request->service_short_description;
             $service->service_long_description = $request->service_long_description;
 
@@ -104,6 +107,7 @@ class CleaningServiceController extends Controller
                 'service_title' => 'required|string|max:255',
                 'service_slug' => 'required|string|max:255|unique:cleaning_services,service_slug,' . $id,
                 'service_price' => 'required|numeric|min:0',
+                'service_duration' => 'required|string',
                 'service_short_description' => 'required|string',
                 'service_long_description' => 'required|string',
                 'service_status' => 'required|in:active,inactive',
@@ -115,6 +119,7 @@ class CleaningServiceController extends Controller
                 'service_slug.unique' => 'Service slug already exists',
                 'service_price.required' => 'Service price is required',
                 'service_price.numeric' => 'Service price must be numeric',
+                'service_duration.required' => 'Service duration is required',
                 'service_short_description.required' => 'Short description is required',
                 'service_long_description.required' => 'Long description is required',
                 'service_image.image' => 'Service image must be an image file',
@@ -133,6 +138,7 @@ class CleaningServiceController extends Controller
             $service->service_title = $request->service_title;
             $service->service_slug = Str::slug($request->service_slug);
             $service->service_price = $request->service_price;
+            $service->service_duration = $request->service_duration;
             $service->service_short_description = $request->service_short_description;
             $service->service_long_description = $request->service_long_description;
             $service->service_status = $request->service_status;

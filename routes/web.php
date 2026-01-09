@@ -19,6 +19,8 @@ Route::middleware('web')->group(function () {
     // Service Details
     Route::get('/service/{slug}', [FrontendController::class, 'ServiceDetails'])->name('service.details');
 
+    // Service Booking
+    Route::post('/service-booking/store', [FrontendController::class, 'ServiceBookingStore'])->name('service.booking.store');
 });
 
 Route::get('/admin/login', function () {
@@ -27,22 +29,20 @@ Route::get('/admin/login', function () {
 
 Route::post('/login-store', [AdminController::class, 'store'])->name('admin.login.store');
 
-
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/dashboard', [FrontendController::class, 'UserDashboard'])->name('dashboard');
+    Route::get('/dashboard/service-purchases/{booking}', [FrontendController::class, 'ServicePurchaseShow'])->name('user.service.purchase.show');
+    Route::get('/dashboard/service-purchases/{booking}/invoice', [FrontendController::class, 'ServicePurchaseInvoice'])->name('user.service.purchase.invoice');
+    Route::get('/dashboard/service-purchases/{booking}/invoice/print', [FrontendController::class, 'ServicePurchaseInvoicePrint'])->name('user.service.purchase.invoice.print');
 });
 
 require __DIR__ . '/auth.php';
 
 Route::middleware('auth')->group(function () {
-
     Route::get('/admin/dashboard', function () {
         $admin_data = Auth::user();
         return view('admin.index', compact('admin_data'));

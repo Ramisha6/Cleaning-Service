@@ -116,6 +116,8 @@
     <!-- Main Js File -->
     <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
 
+    @include('frontend.layout.script')
+
 </body>
 
 </html>
