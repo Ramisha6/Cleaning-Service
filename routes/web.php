@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CleaningServiceController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ServiceBookingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -56,6 +57,19 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/service/edit/{id}', 'edit')->name('admin.Service.edit');
         Route::post('/admin/service/update/{id}', 'update')->name('admin.Service.update');
         Route::get('/admin/service/delete/{id}', 'delete')->name('admin.Service.delete');
+    });
+
+    Route::controller(ServiceBookingController::class)->group(function () {
+        Route::get('/admin/booking/list', 'index')->name('admin.Booking.list');
+        Route::get('/admin/booking/show/{id}', 'show')->name('admin.Booking.show');
+
+        Route::post('/admin/booking/confirm/{id}', 'confirm')->name('admin.booking.confirm');
+        Route::post('/admin/booking/cancel/{id}', 'cancel')->name('admin.booking.cancel');
+        Route::post('/admin/booking/payment/verify/{id}', 'verifyPayment')->name('admin.booking.payment.verify');
+        Route::post('/admin/booking/payment/reject/{id}', 'rejectPayment')->name('admin.booking.payment.reject');
+
+        Route::get('/admin/booking/invoice/{id}', 'invoice')->name('admin.Booking.invoice');
+        Route::get('/admin/booking/invoice/{id}/download', 'invoiceDownload')->name('admin.Booking.invoice.download');
     });
 });
 

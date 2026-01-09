@@ -39,4 +39,23 @@
         </div>
     </li>
 
+    @php
+        $bookingOpen = request()->routeIs('admin.Booking.*');
+    @endphp
+
+    <li class="nav-item {{ $bookingOpen ? 'active' : '' }}">
+        <a class="nav-link {{ $bookingOpen ? '' : 'collapsed' }} {{ $bookingOpen ? 'active' : '' }}" href="#" data-toggle="collapse" data-target="#collapseBookings" aria-expanded="{{ $bookingOpen ? 'true' : 'false' }}" aria-controls="collapseBookings">
+            <i class="fas fa-fw fa-receipt"></i>
+            <span>Bookings</span>
+        </a>
+
+        <div id="collapseBookings" class="collapse {{ $bookingOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item {{ request()->routeIs('admin.Booking.list') ? 'active' : '' }}" href="{{ route('admin.Booking.list') }}">
+                    Booking List
+                </a>
+            </div>
+        </div>
+    </li>
+
 </ul>
