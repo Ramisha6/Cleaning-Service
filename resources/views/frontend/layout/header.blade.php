@@ -47,7 +47,7 @@
                                         <a href="">About Us</a>
                                     </li>
                                     <li class="menu-item-has-children">
-                                        <a href="">Service</a>
+                                        <a href="{{ route('services') }}">Service</a>
                                     </li>
                                     <li>
                                         <a href="">Contact</a>

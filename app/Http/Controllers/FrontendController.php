@@ -18,6 +18,12 @@ class FrontendController extends Controller
 
         return view('frontend.index', compact('services'));
     }
+    public function Services()
+    {
+        $services = CleaningServices::where('service_status', 'active')->latest()->get();
+
+        return view('frontend.service.services', compact('services'));
+    }
 
     public function ServiceDetails($slug)
     {

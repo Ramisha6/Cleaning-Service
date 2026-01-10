@@ -21,4 +21,10 @@ class ServiceBooking extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // Cleaner assignments
+    public function cleanerAssigns()
+    {
+        return $this->hasMany(CleanerAssign::class, 'job_id');
+    }
 }

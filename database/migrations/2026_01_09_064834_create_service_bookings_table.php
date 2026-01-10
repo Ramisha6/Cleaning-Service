@@ -33,6 +33,9 @@ return new class extends Migration {
             // Booking status
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
 
+            //progress status
+            $table->enum('progress_status', ['pending', 'in_progress', 'completed', 'rejected'])->default('pending');
+
             $table->timestamps();
 
             $table->index(['service_id', 'booking_date']);
