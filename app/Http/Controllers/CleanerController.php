@@ -174,4 +174,10 @@ class CleanerController extends Controller
             'message' => 'Status updated successfully',
         ]);
     }
+
+    public function showBooking($id)
+    {
+        $booking = ServiceBooking::findOrFail($id);
+        return view('cleaner.booking.show', compact('booking'));
+    }
 }
