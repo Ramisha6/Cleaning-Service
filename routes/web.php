@@ -126,5 +126,5 @@ Route::middleware(['auth', 'role:cleaner'])->group(function () {
     Route::get('/cleaner/booking/list', [CleanerController::class, 'CleanerBookingList'])->name('cleaner.Booking.list');
 
     Route::post('/booking/update-status', [CleanerController::class, 'updateStatus'])->name('cleaner.booking.update.status');
-    Route::get('/booking/{id}', [CleanerController::class, 'showBooking'])->name('cleaner.booking.show');
+    Route::get('/clear/show-booking/{id}', [CleanerController::class, 'showBooking'])->name('cleaner.booking.show');
 });
