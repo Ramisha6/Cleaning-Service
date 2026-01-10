@@ -8,6 +8,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceBookingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
+use App\Models\ServiceBooking;
+use App\Models\CleanerAssign;
 
 // #################### Frontend Routes ####################
 Route::middleware('web')->group(function () {
@@ -47,7 +50,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Admin Dashboard
     Route::get('/admin/dashboard', function () {
         $admin_data = Auth::user();
-        return view('admin.index', compact('admin_data'));
+        $total_bookings = ServiceBooking::count();
+        $pending_bookings = ServiceBooking::where('status', 'pending')->count();
+        $in_progress_bookings = ServiceBooking::where('status', 'in_progress')->count();
+        $completed_bookings = ServiceBooking::where('status', 'completed')->count();
+        return view('admin.index', compact('admin_data', 'total_bookings', 'pending_bookings', 'in_progress_bookings', 'completed_bookings'));
     })->name('admin.dashboard');
 
     // Service Management
@@ -71,6 +78,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::get('/admin/booking/invoice/{id}', 'invoice')->name('admin.Booking.invoice');
         Route::get('/admin/booking/invoice/{id}/download', 'invoiceDownload')->name('admin.Booking.invoice.download');
+
+        // cleaner assign
+        Route::post('/admin/booking/cleaner/assign', 'CleanerAssign')->name('admin.Booking.cleaner.assign');
     });
 
     Route::controller(CleanerController::class)->group(function () {
@@ -104,6 +114,17 @@ Route::middleware(['auth', 'role:cleaner'])->group(function () {
     // Cleaner Dashboard
     Route::get('/cleaner/dashboard', function () {
         $admin_data = Auth::user();
-        return view('cleaner.index', compact('admin_data'));
+        $total_bookings = CleanerAssign::where('cleaner_id', $admin_data->id)->with('booking')->count();
+        $pending_bookings = CleanerAssign::where('cleaner_id', $admin_data->id)->where('status', 'pending')->with('booking')->count();
+        $in_progress_bookings = CleanerAssign::where('cleaner_id', $admin_data->id)->where('status', 'in_progress')->with('booking')->count();
+        $completed_bookings = CleanerAssign::where('cleaner_id', $admin_data->id)->where('status', 'completed')->with('booking')->count();
+
+        return view('cleaner.index', compact('admin_data', 'total_bookings', 'pending_bookings', 'in_progress_bookings', 'completed_bookings'));
     })->name('cleaner.dashboard');
+
+    // cleaner booking list
+    Route::get('/cleaner/booking/list', [CleanerController::class, 'CleanerBookingList'])->name('cleaner.Booking.list');
+
+    Route::post('/booking/update-status', [CleanerController::class, 'updateStatus'])->name('cleaner.booking.update.status');
+    Route::get('/booking/{id}', [CleanerController::class, 'showBooking'])->name('cleaner.booking.show');
 });

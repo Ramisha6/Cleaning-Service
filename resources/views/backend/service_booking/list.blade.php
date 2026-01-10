@@ -1,5 +1,10 @@
 @extends('admin.dashboard')
 @section('admin_content')
+    <!-- jQuery should be loaded BEFORE your custom scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Booking List</h1>
         <ol class="breadcrumb">
@@ -22,6 +27,7 @@
                                 <th>Date</th>
                                 <th>Payment</th>
                                 <th>Payment Status</th>
+                                <th>Progress Status</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -55,6 +61,21 @@
                                     </td>
 
                                     <td>
+                                        @php
+                                            $statusConfig = [
+                                                'pending' => ['class' => 'badge-warning', 'label' => 'Pending'],
+                                                'in_progress' => ['class' => 'badge-primary', 'label' => 'In Progress'],
+                                                'completed' => ['class' => 'badge-success', 'label' => 'Completed'],
+                                                'rejected' => ['class' => 'badge-danger', 'label' => 'Rejected'],
+                                            ];
+
+                                            $config = $statusConfig[$booking->progress_status] ?? ['class' => 'badge-secondary', 'label' => ucfirst($booking->progress_status)];
+                                        @endphp
+
+                                        <span class="badge {{ $config['class'] }}">{{ $config['label'] }}</span>
+                                    </td>
+
+                                    <td>
                                         @if ($booking->status === 'confirmed')
                                             <span class="badge badge-success">Confirmed</span>
                                         @elseif($booking->status === 'cancelled')
@@ -65,17 +86,23 @@
                                     </td>
 
                                     <td style="display: block ruby;">
-                                        <a href="{{ route('admin.Booking.show', $booking->id) }}" class="btn btn-sm btn-primary">
-                                            View
+                                        <a href="{{ route('admin.Booking.show', $booking->id) }}" class="btn btn-sm btn-primary" title="Show Booking">
+                                            <i class="fas fa-eye"></i>
                                         </a>
 
-                                        <a href="{{ route('admin.Booking.invoice', $booking->id) }}" class="btn btn-sm btn-info">
-                                            Invoice
+                                        <a href="{{ route('admin.Booking.invoice', $booking->id) }}" class="btn btn-sm btn-info" title="Invoice">
+                                            <i class="fas fa-print"></i>
                                         </a>
 
-                                        <a href="{{ route('admin.Booking.invoice.download', $booking->id) }}" class="btn btn-sm btn-dark" target="_blank">
-                                            Download
+                                        <a href="{{ route('admin.Booking.invoice.download', $booking->id) }}" class="btn btn-sm btn-dark" target="_blank" title="Download">
+                                            <i class="fas fa-download"></i>
                                         </a>
+
+                                        {{-- Cleaner Assign --}}
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-info assignCleanerBtn" data-id="{{ $booking->id }}" title="Assign Cleaner" data-toggle="modal" data-target="#assignCleanerModal">
+                                            <i class="fas fa-user"></i>
+                                        </a>
+
                                     </td>
                                 </tr>
                             @endforeach
@@ -86,4 +113,90 @@
             </div>
         </div>
     </div>
+
+    <!-- Assign Cleaner Modal -->
+    <div class="modal fade" id="assignCleanerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form id="assignCleanerForm">
+                @csrf
+                <input type="hidden" id="job_id" name="job_id">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Assign Cleaner</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Select Cleaner</label>
+                            <select name="cleaner_id" id="cleaner_id" class="form-control" required>
+                                <option value="">-- Select Cleaner --</option>
+
+                                {{-- Example --}}
+                                @foreach ($cleaners as $cleaner)
+                                    <option value="{{ $cleaner->id }}">
+                                        {{ $cleaner->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">
+                            Assign
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).on('click', '.assignCleanerBtn', function() {
+            let jobId = $(this).data('id');
+            $('#job_id').val(jobId);
+        });
+
+        // Submit Form
+        $('#assignCleanerForm').submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: "{{ route('admin.Booking.cleaner.assign') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    job_id: $('#job_id').val(),
+                    cleaner_id: $('#cleaner_id').val(),
+                },
+                success: function(response) {
+                    alert(response.message);
+
+                    $('#assignCleanerModal').modal('hide');
+
+                    $('#assignCleanerForm')[0].reset();
+
+                    location.reload();
+                },
+                error: function(xhr) {
+                    let errorMessage = 'Something went wrong!';
+
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        errorMessage = Object.values(xhr.responseJSON.errors).flat().join('<br>');
+                    }
+
+                    alert(errorMessage);
+                }
+            });
+        });
+
+        // Clean up modal backdrop when closed
+        $('#assignCleanerModal').on('hidden.bs.modal', function() {
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+        });
+    </script>
 @endsection

@@ -16,4 +16,12 @@
 
     <hr class="sidebar-divider">
 
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('cleaner.Booking.list') }}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Booking</span></a>
+    </li>
+
+    <hr class="sidebar-divider">
+
 </ul>
