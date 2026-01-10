@@ -15,7 +15,7 @@ Route::middleware('web')->group(function () {
     Route::get('/', [FrontendController::class, 'Index'])->name('index');
 
     // Services
-    Route::get('/service', [FrontendController::class, 'Service'])->name('service');
+    Route::get('/services', [FrontendController::class, 'Services'])->name('services');
 
     // Service Details
     Route::get('/service/{slug}', [FrontendController::class, 'ServiceDetails'])->name('service.details');
