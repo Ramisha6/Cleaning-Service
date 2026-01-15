@@ -155,4 +155,10 @@ class FrontendController extends Controller
         // Print-optimized view
         return view('frontend.user.service_purchase_invoice_print', compact('booking'));
     }
+
+
+    public function AboutUs(){
+        return view('frontend.pages.about_us');
+    }
+
 }

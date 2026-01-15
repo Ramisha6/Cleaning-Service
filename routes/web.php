@@ -25,6 +25,9 @@ Route::middleware('web')->group(function () {
 
     // Booking Store (Guests + Auth users)
     Route::post('/service-booking/store', [FrontendController::class, 'ServiceBookingStore'])->name('service.booking.store');
+
+    Route::get('/about-us', [FrontendController::class, 'AboutUs'])->name('about.us');
+    
 });
 
 // #################### Auth & Admin Login ####################
