@@ -17,15 +17,16 @@ class FrontendController extends Controller
     {
         $services = CleaningServices::where('service_status', 'active')->latest()->get();
 
-        $slider = Slider::where('slider_status', 'active')->latest()->get();
+        $slider = Slider::where('slider_status', 'active')->orderBy('id', 'asc')->get();
 
         return view('frontend.index', compact('services', 'slider'));
     }
+    
     public function Services()
     {
         $services = CleaningServices::where('service_status', 'active')->latest()->get();
 
-        return view('frontend.service.services', compact('services'));
+        return view('frontend.pages.services', compact('services'));
     }
 
     public function ServiceDetails($slug)

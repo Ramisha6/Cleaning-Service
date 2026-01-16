@@ -17,16 +17,19 @@
         </div>
     </div>
 
+    {{-- Service Area --}}
     <section class="service-area py-5">
+
         <div class="container">
-            <div class="row vs-carousel my-5" data-slide-show="4" data-ml-slide-show="3" data-lg-slide-show="3" data-md-slide-show="2" data-autoplay="true" data-arrows="true">
+
+            <div class="row my-5">
 
                 @foreach ($services as $key => $service)
-                    <div class="col-lg-3 wow animate__fadeInUp" data-wow-delay="0.25s">
-                        <div class="vs-service__style1">
+                    <div class="col-lg-4 col-md-6 mb-4 wow animate__fadeInUp" data-wow-delay="0.25s">
+                        <div class="vs-service__style1 h-100">
                             <div class="vs-service__img">
                                 <a href="{{ route('service.details', $service->service_slug) }}">
-                                    <img src="{{ !empty($service->service_image) ? url('upload/service_image/' . $service->service_image) : url('upload/no_image.jpg') }}" alt="{{ $service->service_title }}">
+                                    <img src="{{ !empty($service->service_image) ? url('upload/service_image/' . $service->service_image) : url('upload/no_image.jpg') }}" alt="{{ $service->service_title }}" class="img-fluid">
                                 </a>
                             </div>
 
@@ -45,7 +48,9 @@
                                     </div>
                                 </div>
 
-                                <p class="vs-service__text">{{ $service->service_short_description }}</p>
+                                <p class="vs-service__text">
+                                    {{ $service->service_short_description }}
+                                </p>
 
                                 {{-- Book Now button --}}
                                 <div class="vs-service__actions">
@@ -59,7 +64,9 @@
                 @endforeach
 
             </div>
+
         </div>
+        
     </section>
 
 @endsection

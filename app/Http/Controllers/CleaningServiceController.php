@@ -163,7 +163,7 @@ class CleaningServiceController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with('message', 'Cleaning Service updated successfully!')->with('alert-type', 'success');
+            return redirect()->route('admin.Service.list')->with('message', 'Cleaning Service updated successfully!')->with('alert-type', 'success');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());
