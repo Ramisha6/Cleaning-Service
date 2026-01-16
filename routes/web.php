@@ -32,7 +32,6 @@ Route::middleware('web')->group(function () {
 
     // Contact Us
     Route::get('/contact-us', [FrontendController::class, 'ContactUs'])->name('contact.us');
-    
 });
 
 // #################### Auth & Admin Login ####################
@@ -107,6 +106,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/slider/edit/{id}', 'edit')->name('admin.slider.edit');
         Route::post('/admin/slider/update/{id}', 'update')->name('admin.slider.update');
         Route::get('/admin/slider/delete/{id}', 'delete')->name('admin.slider.delete');
+    });
+
+    // ✅ Admin 404 fallback (must be LAST in this group)
+    Route::fallback(function () {
+        return response()->view('admin.errors.404', [], 404);
     });
 });
 
