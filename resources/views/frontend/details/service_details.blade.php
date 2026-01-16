@@ -62,20 +62,29 @@
                                     <input type="hidden" name="service_id" value="{{ $service_details->id }}">
 
                                     <div class="row gx-3">
+
+                                        @php
+                                            $authUser = Auth::user();
+                                        @endphp
+
                                         <div class="col-12 form-group">
-                                            <input name="name" type="text" class="form-control" placeholder="Your Name *" required>
+                                            <input name="name" type="text" class="form-control" placeholder="Your Name *" value="{{ old('name', $authUser?->name) }}" required>
                                         </div>
 
                                         <div class="col-12 form-group">
-                                            <input name="email" type="email" class="form-control" placeholder="Email (optional)">
+                                            <input name="email" type="email" class="form-control" placeholder="Email" value="{{ old('email', $authUser?->email) }}" {{ $authUser ? 'readonly' : '' }}>
+                                            @if ($authUser)
+                                                <small class="text-muted">Email is locked from your account.</small>
+                                            @endif
                                         </div>
 
                                         <div class="col-12 form-group">
-                                            <input name="phone" type="text" class="form-control" placeholder="Phone *" required>
+                                            <input name="phone" type="text" class="form-control" placeholder="Phone *" value="{{ old('phone', $authUser?->phone) }}" required>
                                         </div>
 
+
                                         <div class="col-12 form-group">
-                                            <input name="date" type="date" class="form-control" required>
+                                            <input name="date" type="date" class="form-control" value="{{ date('Y-m-d') }}" required>
                                         </div>
 
                                         <div class="col-12 form-group">

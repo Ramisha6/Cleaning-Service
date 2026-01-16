@@ -85,9 +85,10 @@
                                             </div>
 
                                             <div class="user-menu">
-                                                <a href="{{ route('dashboard') }}">
+                                                <a href="{{ $user->role === 'admin' ? route('admin.dashboard') : route('dashboard') }}">
                                                     <i class="far fa-user-circle"></i> Dashboard
                                                 </a>
+
 
                                                 <form method="POST" action="{{ route('logout') }}">
                                                     @csrf

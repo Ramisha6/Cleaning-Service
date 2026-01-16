@@ -43,7 +43,7 @@ class FrontendController extends Controller
 
     public function ServiceBookingStore(Request $request)
     {
-        // If route middleware not added, enforce here too:
+        // ✅ Must be logged in (keep this even if you also add route middleware)
         if (!Auth::check()) {
             return redirect()->route('login')->with('message', 'Please login to book a service.')->with('alert-type', 'warning');
         }
@@ -52,12 +52,14 @@ class FrontendController extends Controller
             $request->all(),
             [
                 'service_id' => ['required', 'integer', 'exists:cleaning_services,id'],
+
+                // User info (name/phone can be entered, email will be forced from account)
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['nullable', 'email', 'max:255'],
                 'phone' => ['required', 'string', 'max:30'],
                 'date' => ['required', 'date'],
                 'note' => ['nullable', 'string', 'max:2000'],
 
+                // Payment
                 'payment_method' => ['required', 'in:cod,bkash'],
                 'bkash_number' => ['required_if:payment_method,bkash', 'nullable', 'string', 'max:20'],
                 'transaction_id' => ['required_if:payment_method,bkash', 'nullable', 'string', 'max:80', 'unique:service_bookings,transaction_id'],
@@ -84,29 +86,44 @@ class FrontendController extends Controller
 
         try {
             $booking = DB::transaction(function () use ($request) {
-                // Create first to get ID, then generate invoice
+                $user = Auth::user();
+
+                // ✅ Force email from authenticated user (no multiple emails)
+                $emailToSave = $user->email;
+
+                // ✅ COD rules: keep bkash fields empty
+                $bkashNumber = $request->payment_method === 'bkash' ? $request->bkash_number : null;
+                $trxId = $request->payment_method === 'bkash' ? $request->transaction_id : null;
+
+                // ✅ payment_status: cod=pending, bkash=unverified (admin will verify)
+                $paymentStatus = $request->payment_method === 'bkash' ? 'unverified' : 'pending';
+
+                // ✅ Create booking first (TEMP invoice, then update)
                 $booking = ServiceBooking::create([
                     'invoice_no' => 'TEMP',
 
-                    'user_id' => Auth::id(),
+                    'user_id' => $user->id,
                     'service_id' => (int) $request->service_id,
 
                     'name' => $request->name,
-                    'email' => $request->email,
+                    'email' => $emailToSave, // ✅ fixed email
                     'phone' => $request->phone,
                     'booking_date' => $request->date,
                     'note' => $request->note,
 
                     'payment_method' => $request->payment_method,
-                    'bkash_number' => $request->payment_method === 'bkash' ? $request->bkash_number : null,
-                    'transaction_id' => $request->payment_method === 'bkash' ? $request->transaction_id : null,
+                    'bkash_number' => $bkashNumber,
+                    'transaction_id' => $trxId,
+                    'payment_status' => $paymentStatus,
 
-                    // payment_status: cod = pending, bkash = unverified (admin will verify)
-                    'payment_status' => $request->payment_method === 'bkash' ? 'unverified' : 'pending',
-
+                    // Booking status
                     'status' => 'pending',
+
+                    // ✅ If you have progress_status column, keep this:
+                    // 'progress_status' => 'pending',
                 ]);
 
+                // ✅ Generate invoice: INV-YYYYMMDD-000001
                 $invoiceNo = 'INV-' . now()->format('Ymd') . '-' . str_pad((string) $booking->id, 6, '0', STR_PAD_LEFT);
                 $booking->update(['invoice_no' => $invoiceNo]);
 

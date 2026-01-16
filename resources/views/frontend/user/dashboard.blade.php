@@ -48,19 +48,25 @@
                                             <h5 class="mb-3">Profile Information</h5>
 
                                             <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-12 mb-3">
                                                     <label>Name</label>
                                                     <input type="text" class="form-control" value="{{ Auth::user()->name }}" disabled>
                                                 </div>
 
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-12 mb-3">
                                                     <label>Email</label>
                                                     <input type="email" class="form-control" value="{{ Auth::user()->email }}" disabled>
                                                 </div>
+
+                                                <div class="col-md-12 mb-3">
+                                                    <label>Phone</label>
+                                                    <input type="text" class="form-control" value="{{ Auth::user()->phone }}" disabled>
+                                                </div>
+
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-12 mb-3">
                                                     <label>Joined</label>
                                                     <input type="text" class="form-control" value="{{ Auth::user()->created_at->format('d M Y') }}" disabled>
                                                 </div>
