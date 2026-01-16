@@ -17,7 +17,7 @@ class FrontendController extends Controller
     {
         $services = CleaningServices::where('service_status', 'active')->latest()->get();
 
-        $slider = Slider::where('slider_status', 'active')->orderBy('id', 'asc')->get();
+        $slider = Slider::where('slider_status', 'active')->latest()->get();
 
         return view('frontend.index', compact('services', 'slider'));
     }
