@@ -62,15 +62,7 @@ Route::prefix('admin')
     ->middleware(['auth', 'role:admin'])
     ->group(function () {
         // Admin Dashboard
-        Route::get('/dashboard', function () {
-            $admin_data = Auth::user();
-            $total_bookings = ServiceBooking::count();
-            $pending_bookings = ServiceBooking::where('status', 'pending')->count();
-            $in_progress_bookings = ServiceBooking::where('status', 'in_progress')->count();
-            $completed_bookings = ServiceBooking::where('status', 'completed')->count();
-
-            return view('admin.index', compact('admin_data', 'total_bookings', 'pending_bookings', 'in_progress_bookings', 'completed_bookings'));
-        })->name('admin.dashboard');
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
         // Service Management
         Route::controller(CleaningServiceController::class)->group(function () {
@@ -96,6 +88,8 @@ Route::prefix('admin')
             Route::get('/booking/invoice/{id}/download', 'invoiceDownload')->name('admin.Booking.invoice.download');
 
             Route::post('/booking/cleaner/assign', 'CleanerAssign')->name('admin.Booking.cleaner.assign');
+
+            Route::post('/booking/progress/{id}', 'updateProgressStatus')->name('admin.booking.progress.update');
         });
 
         Route::controller(CleanerController::class)->group(function () {

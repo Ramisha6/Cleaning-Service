@@ -72,6 +72,7 @@
 
                         <div class="col-md-6 mb-3">
                             <h6 class="font-weight-bold">Booking Status</h6>
+
                             <p class="mb-1">
                                 <strong>Status:</strong>
                                 @if ($booking->status === 'confirmed')
@@ -83,7 +84,23 @@
                                 @endif
                             </p>
 
-                            <p class="mb-0"><strong>Created:</strong> {{ optional($booking->created_at)->format('d M Y, h:i A') }}</p>
+                            <p class="mb-1">
+                                <strong>Progress Status:</strong>
+                                @if ($booking->progress_status === 'completed')
+                                    <span class="badge badge-success">Completed</span>
+                                @elseif($booking->progress_status === 'in_progress')
+                                    <span class="badge badge-info">In Progress</span>
+                                @elseif($booking->progress_status === 'rejected')
+                                    <span class="badge badge-danger">Rejected</span>
+                                @else
+                                    <span class="badge badge-secondary">Pending</span>
+                                @endif
+                            </p>
+
+                            <p class="mb-0">
+                                <strong>Created:</strong> {{ optional($booking->created_at)->format('d M Y, h:i A') }}
+                            </p>
+
                         </div>
                     </div>
 
@@ -106,6 +123,8 @@
 
                 <div class="card-body">
 
+                    <h6 class="font-weight-bold mb-2">Status Actions</h6>
+
                     {{-- Booking Actions --}}
                     <form action="{{ route('admin.booking.confirm', $booking->id) }}" method="POST" class="mb-2">
                         @csrf
@@ -123,24 +142,63 @@
 
                     {{-- Payment Actions (bKash only) --}}
                     @if ($booking->payment_method === 'bkash')
+                        <hr>
+
+                        <h6 class="font-weight-bold mb-2">Payment Actions</h6>
+
                         <div class="text-small mb-2">
                             bKash payment requires verification.
                         </div>
 
                         <form action="{{ route('admin.booking.payment.verify', $booking->id) }}" method="POST" class="mb-2">
                             @csrf
-                            <button type="submit" class="btn btn-primary btn-block">
+                            <button type="submit" class="btn btn-success btn-block">
                                 Verify Payment
                             </button>
                         </form>
 
                         <form action="{{ route('admin.booking.payment.reject', $booking->id) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-warning btn-block">
+                            <button type="submit" class="btn btn-danger btn-block">
                                 Reject Payment
                             </button>
                         </form>
                     @endif
+
+                    <hr>
+                    <h6 class="font-weight-bold mb-2">Progress Actions</h6>
+
+                    <form action="{{ route('admin.booking.progress.update', $booking->id) }}" method="POST" class="mb-2">
+                        @csrf
+                        <input type="hidden" name="progress_status" value="pending">
+                        <button type="submit" class="btn btn-secondary btn-block" {{ $booking->status === 'cancelled' ? 'disabled' : '' }}>
+                            Mark Pending
+                        </button>
+                    </form>
+
+                    <form action="{{ route('admin.booking.progress.update', $booking->id) }}" method="POST" class="mb-2">
+                        @csrf
+                        <input type="hidden" name="progress_status" value="in_progress">
+                        <button type="submit" class="btn btn-info btn-block" {{ $booking->status === 'cancelled' ? 'disabled' : '' }}>
+                            Mark In Progress
+                        </button>
+                    </form>
+
+                    <form action="{{ route('admin.booking.progress.update', $booking->id) }}" method="POST" class="mb-2">
+                        @csrf
+                        <input type="hidden" name="progress_status" value="completed">
+                        <button type="submit" class="btn btn-success btn-block" {{ $booking->status === 'cancelled' ? 'disabled' : '' }}>
+                            Mark Completed
+                        </button>
+                    </form>
+
+                    <form action="{{ route('admin.booking.progress.update', $booking->id) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="progress_status" value="rejected">
+                        <button type="submit" class="btn btn-danger btn-block" {{ $booking->status === 'cancelled' ? 'disabled' : '' }}>
+                            Mark Rejected
+                        </button>
+                    </form>
 
                 </div>
             </div>

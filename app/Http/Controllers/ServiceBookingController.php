@@ -100,9 +100,9 @@ class ServiceBookingController extends Controller
                 'status' => 'pending',
             ]);
 
-            ServiceBooking::where('id', $request->job_id)->update([
-                'progress_status' => 'in_progress',
-            ]);
+            ServiceBooking::where('id', $request->job_id)
+                ->where('status', '!=', 'cancelled')
+                ->update(['progress_status' => 'in_progress']);
 
             DB::commit();
 
@@ -118,5 +118,35 @@ class ServiceBookingController extends Controller
                 'message' => $e->getMessage(),
             ]);
         }
+    }
+
+    public function updateProgressStatus(Request $request, $id)
+    {
+        $request->validate([
+            'progress_status' => 'required|in:pending,in_progress,completed,rejected',
+        ]);
+
+        $booking = ServiceBooking::findOrFail($id);
+
+        // ✅ Rule: if booking is cancelled, don't allow progress change
+        if ($booking->status === 'cancelled') {
+            return redirect()->back()->with('message', 'Cancelled booking progress cannot be updated.')->with('alert-type', 'warning');
+        }
+
+        // ✅ Rule: must be confirmed before completed (recommended)
+        if ($request->progress_status === 'completed' && $booking->status !== 'confirmed') {
+            return redirect()->back()->with('message', 'Booking must be confirmed before marking completed.')->with('alert-type', 'warning');
+        }
+
+        // ✅ Rule: bKash must be verified before completed (recommended)
+        if ($request->progress_status === 'completed' && $booking->payment_method === 'bkash' && $booking->payment_status !== 'verified') {
+            return redirect()->back()->with('message', 'bKash payment must be verified before completing.')->with('alert-type', 'warning');
+        }
+
+        $booking->update([
+            'progress_status' => $request->progress_status,
+        ]);
+
+        return redirect()->back()->with('message', 'Progress status updated successfully.')->with('alert-type', 'success');
     }
 }
