@@ -110,4 +110,30 @@
         </div>
     </li>
 
+    {{-- ================= Cleaners ================= --}}
+    @php
+        $eventOpen = request()->routeIs('admin.event.*');
+    @endphp
+
+    <li class="nav-item {{ $eventOpen ? 'active' : '' }}">
+        <a class="nav-link {{ $eventOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse" data-target="#collapseEvents" aria-expanded="{{ $eventOpen ? 'true' : 'false' }}">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Events</span>
+        </a>
+
+        <div id="collapseEvents" class="collapse {{ $eventOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+
+                <a class="collapse-item {{ request()->routeIs('admin.event.list') ? 'active' : '' }}" href="{{ route('admin.event.list') }}">
+                    Event List
+                </a>
+
+                <a class="collapse-item {{ request()->routeIs('admin.event.add') ? 'active' : '' }}" href="{{ route('admin.event.add') }}">
+                    Add Event
+                </a>
+
+            </div>
+        </div>
+    </li>
+
 </ul>

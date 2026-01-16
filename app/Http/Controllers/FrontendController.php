@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CleaningServices;
+use App\Models\Event;
 use App\Models\ServiceBooking;
 use App\Models\Slider;
 use Illuminate\Http\Request;
@@ -19,7 +20,9 @@ class FrontendController extends Controller
 
         $slider = Slider::where('slider_status', 'active')->orderBy('id', 'asc')->get();
 
-        return view('frontend.index', compact('services', 'slider'));
+        $events = Event::where('status', 'active')->orderBy('event_date', 'desc')->get();
+
+        return view('frontend.index', compact('services', 'slider', 'events'));
     }
 
     public function Services()
@@ -164,6 +167,22 @@ class FrontendController extends Controller
     {
         return view('frontend.pages.about_us');
     } // End Method
+
+    public function Events()
+    {
+        $events = Event::where('status', 'active')->orderBy('event_date', 'desc')->get();
+
+        return view('frontend.pages.events', compact('events'));
+    }
+
+    public function EventDetails($slug)
+    {
+        $event = Event::where('slug', $slug)->where('status', 'active')->firstOrFail();
+
+        $recentEvents = Event::where('status', 'active')->where('id', '!=', $event->id)->orderBy('event_date', 'desc')->limit(6)->get();
+
+        return view('frontend.details.event_details', compact('event', 'recentEvents'));
+    }
 
     public function ContactUs()
     {

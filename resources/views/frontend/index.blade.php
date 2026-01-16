@@ -8,4 +8,7 @@
     <!--=============== Services ===============-->
     @include('frontend.home.services')
 
+    <!--=============== Events ===============-->
+    @include('frontend.home.events')
+
 @endsection

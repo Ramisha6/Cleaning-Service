@@ -53,8 +53,9 @@
                             <nav class="main-menu menu-style2 d-none d-lg-block">
                                 <ul>
                                     <li><a href="{{ route('index') }}">Home</a></li>
-                                    <li><a href="{{route('about.us')}}">About Us</a></li>
-                                    <li><a href="{{ route('services') }}">Service</a></li>
+                                    <li><a href="{{ route('about.us') }}">About Us</a></li>
+                                    <li><a href="{{ route('services') }}">Services</a></li>
+                                    <li><a href="{{ route('events') }}">Events</a></li>
                                     <li><a href="{{ route('contact.us') }}">Contact</a></li>
                                 </ul>
                             </nav>

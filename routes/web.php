@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CleanerController;
 use App\Http\Controllers\CleaningServiceController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceBookingController;
@@ -30,6 +31,10 @@ Route::middleware('web')->group(function () {
     // About Us
     Route::get('/about-us', [FrontendController::class, 'AboutUs'])->name('about.us');
 
+    // About Us
+    Route::get('/events', [FrontendController::class, 'Events'])->name('events');
+    Route::get('/event/{slug}', [FrontendController::class, 'EventDetails'])->name('event.details');
+
     // Contact Us
     Route::get('/contact-us', [FrontendController::class, 'ContactUs'])->name('contact.us');
 });
@@ -53,66 +58,78 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 });
 
 // #################### Admin Panel Routes (Only admins) ####################
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    // Admin Dashboard
-    Route::get('/admin/dashboard', function () {
-        $admin_data = Auth::user();
-        $total_bookings = ServiceBooking::count();
-        $pending_bookings = ServiceBooking::where('status', 'pending')->count();
-        $in_progress_bookings = ServiceBooking::where('status', 'in_progress')->count();
-        $completed_bookings = ServiceBooking::where('status', 'completed')->count();
-        return view('admin.index', compact('admin_data', 'total_bookings', 'pending_bookings', 'in_progress_bookings', 'completed_bookings'));
-    })->name('admin.dashboard');
+Route::prefix('admin')
+    ->middleware(['auth', 'role:admin'])
+    ->group(function () {
+        // Admin Dashboard
+        Route::get('/dashboard', function () {
+            $admin_data = Auth::user();
+            $total_bookings = ServiceBooking::count();
+            $pending_bookings = ServiceBooking::where('status', 'pending')->count();
+            $in_progress_bookings = ServiceBooking::where('status', 'in_progress')->count();
+            $completed_bookings = ServiceBooking::where('status', 'completed')->count();
 
-    // Service Management
-    Route::controller(CleaningServiceController::class)->group(function () {
-        Route::get('/admin/service/list', 'index')->name('admin.Service.list');
-        Route::get('/admin/service/add', 'create')->name('admin.Service.add');
-        Route::post('/admin/service/store', 'store')->name('admin.Service.store');
-        Route::get('/admin/service/edit/{id}', 'edit')->name('admin.Service.edit');
-        Route::post('/admin/service/update/{id}', 'update')->name('admin.Service.update');
-        Route::get('/admin/service/delete/{id}', 'delete')->name('admin.Service.delete');
+            return view('admin.index', compact('admin_data', 'total_bookings', 'pending_bookings', 'in_progress_bookings', 'completed_bookings'));
+        })->name('admin.dashboard');
+
+        // Service Management
+        Route::controller(CleaningServiceController::class)->group(function () {
+            Route::get('/service/list', 'index')->name('admin.Service.list');
+            Route::get('/service/add', 'create')->name('admin.Service.add');
+            Route::post('/service/store', 'store')->name('admin.Service.store');
+            Route::get('/service/edit/{id}', 'edit')->name('admin.Service.edit');
+            Route::post('/service/update/{id}', 'update')->name('admin.Service.update');
+            Route::get('/service/delete/{id}', 'delete')->name('admin.Service.delete');
+        });
+
+        Route::controller(ServiceBookingController::class)->group(function () {
+            Route::get('/booking/list', 'index')->name('admin.Booking.list');
+            Route::get('/booking/show/{id}', 'show')->name('admin.Booking.show');
+
+            Route::post('/booking/confirm/{id}', 'confirm')->name('admin.booking.confirm');
+            Route::post('/booking/cancel/{id}', 'cancel')->name('admin.booking.cancel');
+
+            Route::post('/booking/payment/verify/{id}', 'verifyPayment')->name('admin.booking.payment.verify');
+            Route::post('/booking/payment/reject/{id}', 'rejectPayment')->name('admin.booking.payment.reject');
+
+            Route::get('/booking/invoice/{id}', 'invoice')->name('admin.Booking.invoice');
+            Route::get('/booking/invoice/{id}/download', 'invoiceDownload')->name('admin.Booking.invoice.download');
+
+            Route::post('/booking/cleaner/assign', 'CleanerAssign')->name('admin.Booking.cleaner.assign');
+        });
+
+        Route::controller(CleanerController::class)->group(function () {
+            Route::get('/cleaner/list', 'index')->name('admin.cleaner.list');
+            Route::get('/cleaner/add', 'create')->name('admin.cleaner.add');
+            Route::post('/cleaner/store', 'store')->name('admin.cleaner.store');
+            Route::get('/cleaner/edit/{id}', 'edit')->name('admin.cleaner.edit');
+            Route::post('/cleaner/update/{id}', 'update')->name('admin.cleaner.update');
+            Route::get('/cleaner/delete/{id}', 'delete')->name('admin.cleaner.delete');
+        });
+
+        Route::controller(SliderController::class)->group(function () {
+            Route::get('/slider/list', 'list')->name('admin.slider.list');
+            Route::get('/slider/add', 'add')->name('admin.slider.add');
+            Route::post('/slider/store', 'store')->name('admin.slider.store');
+            Route::get('/slider/edit/{id}', 'edit')->name('admin.slider.edit');
+            Route::post('/slider/update/{id}', 'update')->name('admin.slider.update');
+            Route::get('/slider/delete/{id}', 'delete')->name('admin.slider.delete');
+        });
+
+        Route::controller(EventController::class)->group(function () {
+            Route::get('/event/list', 'list')->name('admin.event.list');
+            Route::get('/event/add', 'add')->name('admin.event.add');
+            Route::post('/event/store', 'store')->name('admin.event.store');
+            Route::get('/event/edit/{id}', 'edit')->name('admin.event.edit');
+            Route::post('/event/update/{id}', 'update')->name('admin.event.update');
+            Route::get('/event/delete/{id}', 'delete')->name('admin.event.delete');
+        });
+
+        // ✅ Admin 404 fallback (ONLY for /admin/*)
+        Route::fallback(function () {
+            return response()->view('admin.errors.404', [], 404);
+        });
     });
-
-    Route::controller(ServiceBookingController::class)->group(function () {
-        Route::get('/admin/booking/list', 'index')->name('admin.Booking.list');
-        Route::get('/admin/booking/show/{id}', 'show')->name('admin.Booking.show');
-
-        Route::post('/admin/booking/confirm/{id}', 'confirm')->name('admin.booking.confirm');
-        Route::post('/admin/booking/cancel/{id}', 'cancel')->name('admin.booking.cancel');
-        Route::post('/admin/booking/payment/verify/{id}', 'verifyPayment')->name('admin.booking.payment.verify');
-        Route::post('/admin/booking/payment/reject/{id}', 'rejectPayment')->name('admin.booking.payment.reject');
-
-        Route::get('/admin/booking/invoice/{id}', 'invoice')->name('admin.Booking.invoice');
-        Route::get('/admin/booking/invoice/{id}/download', 'invoiceDownload')->name('admin.Booking.invoice.download');
-
-        // cleaner assign
-        Route::post('/admin/booking/cleaner/assign', 'CleanerAssign')->name('admin.Booking.cleaner.assign');
-    });
-
-    Route::controller(CleanerController::class)->group(function () {
-        Route::get('/admin/cleaner/list', 'index')->name('admin.cleaner.list');
-        Route::get('/admin/cleaner/add', 'create')->name('admin.cleaner.add');
-        Route::post('/admin/cleaner/store', 'store')->name('admin.cleaner.store');
-        Route::get('/admin/cleaner/edit/{id}', 'edit')->name('admin.cleaner.edit');
-        Route::post('/admin/cleaner/update/{id}', 'update')->name('admin.cleaner.update');
-        Route::get('/admin/cleaner/delete/{id}', 'delete')->name('admin.cleaner.delete');
-    });
-
-    Route::controller(SliderController::class)->group(function () {
-        Route::get('/admin/slider/list', 'list')->name('admin.slider.list');
-        Route::get('/admin/slider/add', 'add')->name('admin.slider.add');
-        Route::post('/admin/slider/store', 'store')->name('admin.slider.store');
-        Route::get('/admin/slider/edit/{id}', 'edit')->name('admin.slider.edit');
-        Route::post('/admin/slider/update/{id}', 'update')->name('admin.slider.update');
-        Route::get('/admin/slider/delete/{id}', 'delete')->name('admin.slider.delete');
-    });
-
-    // ✅ Admin 404 fallback (must be LAST in this group)
-    Route::fallback(function () {
-        return response()->view('admin.errors.404', [], 404);
-    });
-});
 
 // #################### Shared Routes (All authenticated users) ####################
 Route::middleware('auth')->group(function () {

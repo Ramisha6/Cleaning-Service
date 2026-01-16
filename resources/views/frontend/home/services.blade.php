@@ -1,6 +1,6 @@
 <section class="vs-service__layout1 space position-relative">
 
-    <div class="container custome-space-bottom">
+    <div class="container">
 
         <div class="row justify-content-center">
             <div class="col-lg-6">
