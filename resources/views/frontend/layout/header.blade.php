@@ -1,4 +1,6 @@
 <header class="vs-header header-layout1 style2">
+
+    {{-- Top Header --}}
     <div class="header-top style2">
         <div class="main-container2">
             <div class="row justify-content-md-between justify-content-center align-items-center">
@@ -25,11 +27,19 @@
             </div>
         </div>
     </div>
+
+    {{-- Main Header --}}
     <div class="sticky-wrapper style2">
+
         <div class="sticky-active">
+
             <div class="menu-area">
+
                 <div class="main-container2">
+
                     <div class="row align-items-center justify-content-between">
+
+                        {{-- Site Logo --}}
                         <div class="col-auto">
                             <div class="header-logo">
                                 <a href="{{ route('index') }}">
@@ -37,29 +47,27 @@
                                 </a>
                             </div>
                         </div>
+
+                        {{-- Main Menu --}}
                         <div class="col">
                             <nav class="main-menu menu-style2 d-none d-lg-block">
                                 <ul>
-                                    <li class="menu-item-has-children">
-                                        <a href="{{ route('index') }}">Home</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{route('about.us')}}">About Us</a>
-                                    </li>
-                                    <li class="menu-item-has-children">
-                                        <a href="{{ route('services') }}">Service</a>
-                                    </li>
-                                    <li>
-                                        <a href="">Contact</a>
-                                    </li>
+                                    <li><a href="{{ route('index') }}">Home</a></li>
+                                    <li><a href="{{route('about.us')}}">About Us</a></li>
+                                    <li><a href="{{ route('services') }}">Service</a></li>
+                                    <li><a href="{{ route('contact.us') }}">Contact</a></li>
                                 </ul>
                             </nav>
                         </div>
+
+                        {{-- Mobile Menu Toggle Button --}}
                         <div class="col-auto d-lg-none">
                             <button class="vs-menu-toggle d-inline-block">
                                 <i class="fal fa-bars"></i>
                             </button>
                         </div>
+
+                        {{-- Login & Register Button --}}
                         <div class="col-auto d-lg-block d-none">
                             <div class="header-inner">
                                 <div class="contact-content d-flex">
@@ -97,9 +105,15 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
+
 </header>

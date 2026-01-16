@@ -27,7 +27,11 @@ Route::middleware('web')->group(function () {
     // Booking Store (Guests + Auth users)
     Route::post('/service-booking/store', [FrontendController::class, 'ServiceBookingStore'])->name('service.booking.store');
 
+    // About Us
     Route::get('/about-us', [FrontendController::class, 'AboutUs'])->name('about.us');
+
+    // Contact Us
+    Route::get('/contact-us', [FrontendController::class, 'ContactUs'])->name('contact.us');
     
 });
 

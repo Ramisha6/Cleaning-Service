@@ -24,9 +24,9 @@
                             <div class="social-style1">
                                 <span class="social-title">Follow On :</span>
                                 <div class="social-icon">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
+                                    <a href="#!"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#!"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="#!"><i class="fab fa-instagram"></i></a>
                                 </div>
                             </div>
                         </div>

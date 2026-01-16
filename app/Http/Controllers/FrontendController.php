@@ -21,7 +21,7 @@ class FrontendController extends Controller
 
         return view('frontend.index', compact('services', 'slider'));
     }
-    
+
     public function Services()
     {
         $services = CleaningServices::where('service_status', 'active')->latest()->get();
@@ -163,5 +163,10 @@ class FrontendController extends Controller
     public function AboutUs()
     {
         return view('frontend.pages.about_us');
-    }
+    } // End Method
+
+    public function ContactUs()
+    {
+        return view('frontend.pages.contact_us');
+    } // End Method
 }
