@@ -6,6 +6,7 @@ use App\Http\Controllers\CleaningServiceController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceBookingController;
+use App\Http\Controllers\SliderController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -93,6 +94,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/cleaner/edit/{id}', 'edit')->name('admin.cleaner.edit');
         Route::post('/admin/cleaner/update/{id}', 'update')->name('admin.cleaner.update');
         Route::get('/admin/cleaner/delete/{id}', 'delete')->name('admin.cleaner.delete');
+    });
+
+    Route::controller(SliderController::class)->group(function () {
+        Route::get('/admin/slider/list', 'list')->name('admin.slider.list');
+        Route::get('/admin/slider/add', 'add')->name('admin.slider.add');
+        Route::post('/admin/slider/store', 'store')->name('admin.slider.store');
+        Route::get('/admin/slider/edit/{id}', 'edit')->name('admin.slider.edit');
+        Route::post('/admin/slider/update/{id}', 'update')->name('admin.slider.update');
+        Route::get('/admin/slider/delete/{id}', 'delete')->name('admin.slider.delete');
     });
 });
 

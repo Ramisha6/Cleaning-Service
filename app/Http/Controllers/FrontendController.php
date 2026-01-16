@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CleaningServices;
 use App\Models\ServiceBooking;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,9 @@ class FrontendController extends Controller
     {
         $services = CleaningServices::where('service_status', 'active')->latest()->get();
 
-        return view('frontend.index', compact('services'));
+        $slider = Slider::where('slider_status', 'active')->orderBy('id', 'asc')->get();
+
+        return view('frontend.index', compact('services', 'slider'));
     }
     public function Services()
     {
@@ -156,9 +159,8 @@ class FrontendController extends Controller
         return view('frontend.user.service_purchase_invoice_print', compact('booking'));
     }
 
-
-    public function AboutUs(){
+    public function AboutUs()
+    {
         return view('frontend.pages.about_us');
     }
-
 }
