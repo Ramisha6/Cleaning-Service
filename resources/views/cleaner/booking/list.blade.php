@@ -39,10 +39,8 @@
                                     <td>
                                         <div>
                                             <strong>{{ $booking->booking->name }}</strong><br>
-                                            <small>{{ $booking->booking->phone }}</small>
-                                            @if($booking->booking->email)
-                                                <br><small class="text-muted">{{ $booking->email }}</small>
-                                            @endif
+                                            <small>{{ $booking->booking->phone }}</small><br>
+                                            <small>{{ $booking->booking->email }}</small>
                                         </div>
                                     </td>
                                     <td>{{ optional($booking->booking->service)->service_title ?? 'N/A' }}</td>
@@ -56,18 +54,11 @@
 
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('cleaner.booking.show', $booking->id) }}" 
-                                               class="btn btn-sm btn-primary" 
-                                               title="View Details">
+                                            <a href="{{ route('cleaner.booking.show', $booking->job_id) }}" class="btn btn-sm btn-primary" title="View Details">
                                                 <i class="fas fa-eye"></i>
                                             </a> &nbsp;
 
-                                            <a href="javascript:void(0)" 
-                                               class="btn btn-sm btn-info updateStatusBtn" 
-                                               data-id="{{ $booking->id }}" data-status="{{ $booking->status }}" 
-                                               data-toggle="modal" 
-                                               data-target="#statusModal" 
-                                               title="Update Status">
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-info updateStatusBtn" data-id="{{ $booking->id }}" data-status="{{ $booking->status }}" data-toggle="modal" data-target="#statusModal" title="Update Status">
                                                 Change Status
                                             </a>
                                         </div>
@@ -88,7 +79,7 @@
         </div>
     </div>
 
-        <!-- Update Status Modal -->
+    <!-- Update Status Modal -->
     <div class="modal fade" id="statusModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -108,6 +99,7 @@
                                 <option value="pending">Pending</option>
                                 <option value="in_progress">In Progress</option>
                                 <option value="completed">Completed</option>
+                                <option value="rejected">Rejected</option>
                             </select>
                         </div>
                     </div>
@@ -133,12 +125,12 @@
             // Modal form submit
             $('#statusUpdateForm').on('submit', function(e) {
                 e.preventDefault();
-                
+
                 const bookingId = $('#booking_id').val();
                 const status = $('#status').val();
-                
+
                 $.ajax({
-                    url: '{{ route("cleaner.booking.update.status") }}',
+                    url: '{{ route('cleaner.booking.update.status') }}',
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
@@ -146,7 +138,7 @@
                         status: status
                     },
                     success: function(response) {
-                        if(response.success) {
+                        if (response.success) {
                             alert(response.message || 'Status updated successfully');
                             $('#statusModal').modal('hide');
                             location.reload();
@@ -162,5 +154,4 @@
             });
         });
     </script>
-
 @endsection

@@ -158,5 +158,10 @@ Route::middleware(['auth', 'role:cleaner'])->group(function () {
     Route::get('/cleaner/booking/list', [CleanerController::class, 'CleanerBookingList'])->name('cleaner.Booking.list');
 
     Route::post('/booking/update-status', [CleanerController::class, 'updateStatus'])->name('cleaner.booking.update.status');
-    Route::get('/clear/show-booking/{id}', [CleanerController::class, 'showBooking'])->name('cleaner.booking.show');
+    Route::get('/cleaner/show-booking/{id}', [CleanerController::class, 'showBooking'])->name('cleaner.booking.show');
+
+    // ✅ Admin 404 fallback (ONLY for /admin/*)
+    Route::fallback(function () {
+        return response()->view('cleaner.errors.404', [], 404);
+    });
 });

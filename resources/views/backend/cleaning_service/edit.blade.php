@@ -60,7 +60,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Service Image</label>
+                            <label>Service Image [914px by 536px]</label>
                             <input type="file" class="form-control @error('service_image') is-invalid @enderror" name="service_image" onchange="showImage(this)">
                             <img id="image" src="{{ $service_info->service_image ? asset('upload/service_image/' . $service_info->service_image) : '' }}" class="img-thumbnail" style="width: 250px; margin-top: 10px">
                         </div>

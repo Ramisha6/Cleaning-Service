@@ -84,7 +84,7 @@
 
 
                                         <div class="col-12 form-group">
-                                            <input name="date" type="date" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                            <input name="date" type="date" class="form-control" value="{{ old('date', date('Y-m-d')) }}" min="{{ date('Y-m-d') }}" required>
                                         </div>
 
                                         <div class="col-12 form-group">

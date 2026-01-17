@@ -177,7 +177,9 @@ class CleanerController extends Controller
 
     public function showBooking($id)
     {
+        
         $booking = ServiceBooking::findOrFail($id);
+        // dd($booking);
         return view('cleaner.booking.show', compact('booking'));
     }
 }
