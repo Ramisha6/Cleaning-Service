@@ -52,13 +52,28 @@
                         <div class="col">
                             <nav class="main-menu menu-style2 d-none d-lg-block">
                                 <ul>
-                                    <li><a href="{{ route('index') }}">Home</a></li>
-                                    <li><a href="{{ route('about.us') }}">About Us</a></li>
-                                    <li><a href="{{ route('services') }}">Services</a></li>
-                                    <li><a href="{{ route('events') }}">Events</a></li>
-                                    <li><a href="{{ route('contact.us') }}">Contact</a></li>
+                                    <li class="{{ request()->routeIs('index') ? 'active' : '' }}">
+                                        <a href="{{ route('index') }}">Home</a>
+                                    </li>
+
+                                    <li class="{{ request()->routeIs('about.us') ? 'active' : '' }}">
+                                        <a href="{{ route('about.us') }}">About Us</a>
+                                    </li>
+
+                                    <li class="{{ request()->routeIs('services') ? 'active' : '' }}">
+                                        <a href="{{ route('services') }}">Services</a>
+                                    </li>
+
+                                    <li class="{{ request()->routeIs('events') ? 'active' : '' }}">
+                                        <a href="{{ route('events') }}">Events</a>
+                                    </li>
+
+                                    <li class="{{ request()->routeIs('contact.us') ? 'active' : '' }}">
+                                        <a href="{{ route('contact.us') }}">Contact</a>
+                                    </li>
                                 </ul>
                             </nav>
+
                         </div>
 
                         {{-- Mobile Menu Toggle Button --}}
