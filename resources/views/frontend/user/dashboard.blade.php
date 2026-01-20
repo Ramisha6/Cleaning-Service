@@ -84,10 +84,16 @@
                                                             <tr>
                                                                 <th style="width:60px;">#</th>
                                                                 <th>Service</th>
-                                                                <th style="width:120px;">Date</th>
-                                                                <th style="width:110px;">Payment</th>
-                                                                <th style="width:150px;">Payment Status</th>
-                                                                <th style="width:140px;">Booking Status</th>
+
+                                                                {{-- ✅ Date + Time --}}
+                                                                <th style="width:200px;">Schedule</th>
+
+                                                                {{-- ✅ Assigned Cleaner --}}
+                                                                <th style="width:180px;">Cleaner</th>
+
+                                                                {{-- ✅ Progress --}}
+                                                                <th style="width:160px;">Progress</th>
+
                                                                 <th class="text-end" style="width:260px;">Action</th>
                                                             </tr>
                                                         </thead>
@@ -95,20 +101,22 @@
                                                         <tbody>
                                                             @foreach ($servicePurchases as $key => $booking)
                                                                 @php
-                                                                    $payClass = match ($booking->payment_status) {
-                                                                        'verified' => 'tag tag--success',
-                                                                        'unverified' => 'tag tag--warning',
+                                                                    // ✅ progress badge class
+                                                                    $progressClass = match ($booking->progress_status) {
+                                                                        'completed' => 'tag tag--success',
+                                                                        'in_progress' => 'tag tag--info',
                                                                         'rejected' => 'tag tag--danger',
-                                                                        default => 'tag tag--muted',
-                                                                    };
-
-                                                                    $statusClass = match ($booking->status) {
-                                                                        'confirmed' => 'tag tag--success',
-                                                                        'cancelled' => 'tag tag--danger',
                                                                         default => 'tag tag--warning',
                                                                     };
 
-                                                                    $methodClass = $booking->payment_method === 'bkash' ? 'tag tag--info' : 'tag tag--muted';
+                                                                    // ✅ cleaner name
+                                                                    $assignedCleaner = optional(optional($booking->cleanerAssign)->cleaner)->name;
+
+                                                                    // ✅ schedule date
+                                                                    $dateText = $booking->booking_date ? \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') : 'N/A';
+
+                                                                    // ✅ schedule time
+                                                                    $timeText = $booking->booking_start_at && $booking->booking_end_at ? \Carbon\Carbon::parse($booking->booking_start_at)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($booking->booking_end_at)->format('h:i A') : 'Time not set';
                                                                 @endphp
 
                                                                 <tr>
@@ -118,18 +126,27 @@
                                                                         {{ optional($booking->service)->service_title ?? 'N/A' }}
                                                                     </td>
 
-                                                                    <td>{{ optional($booking->booking_date)->format('d M Y') }}</td>
-
+                                                                    {{-- ✅ Date + Time --}}
                                                                     <td>
-                                                                        <span class="{{ $methodClass }}">{{ strtoupper($booking->payment_method) }}</span>
+                                                                        <div class="fw-semibold">{{ $dateText }}</div>
+                                                                        <small class="text-muted">{{ $timeText }}</small>
                                                                     </td>
 
+                                                                    {{-- ✅ Cleaner --}}
                                                                     <td>
-                                                                        <span class="{{ $payClass }}">{{ ucfirst($booking->payment_status) }}</span>
+                                                                        @if ($assignedCleaner)
+                                                                            <strong>{{ $assignedCleaner }}</strong>
+                                                                        @else
+                                                                            <span class="text-muted">Not assigned yet</span>
+                                                                        @endif
                                                                     </td>
 
+
+                                                                    {{-- ✅ Progress --}}
                                                                     <td>
-                                                                        <span class="{{ $statusClass }}">{{ ucfirst($booking->status) }}</span>
+                                                                        <span class="{{ $progressClass }}">
+                                                                            {{ ucfirst(str_replace('_', ' ', $booking->progress_status ?? 'pending')) }}
+                                                                        </span>
                                                                     </td>
 
                                                                     <td class="text-end">
@@ -160,15 +177,19 @@
                                                         border-radius: 14px;
                                                         overflow: hidden;
                                                         background: #fff;
+                                                        width: 100%;
+                                                        overflow-x: auto;
+                                                        -webkit-overflow-scrolling: touch;
                                                     }
 
                                                     /* Table base */
                                                     .purchases-table {
                                                         border-collapse: separate;
                                                         border-spacing: 0;
+                                                        min-width: 860px;
                                                     }
 
-                                                    /* Header (soft) */
+                                                    /* Header */
                                                     .purchases-table thead th {
                                                         background: #f8fafc;
                                                         color: #0f172a;
@@ -179,11 +200,12 @@
                                                         white-space: nowrap;
                                                     }
 
-                                                    /* Rows (clean separators, not full grid) */
+                                                    /* Rows */
                                                     .purchases-table tbody td {
                                                         padding: 14px 14px;
                                                         border-bottom: 1px solid #eef2f7;
                                                         vertical-align: middle;
+                                                        white-space: nowrap;
                                                     }
 
                                                     .purchases-table tbody tr:last-child td {
@@ -194,7 +216,7 @@
                                                         background: #fbfdff;
                                                     }
 
-                                                    /* Tags (better than bootstrap badges here) */
+                                                    /* Tags */
                                                     .tag {
                                                         display: inline-flex;
                                                         align-items: center;
@@ -310,32 +332,5 @@
             </div>
         </div>
     </section>
-
-    <style>
-        /* Horizontal scroll container */
-        .purchases-table-wrap {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Force table to be wider than small screens so it scrolls */
-        .purchases-table {
-            min-width: 980px;
-            /* increase if you add more columns */
-        }
-
-        /* Keep cells from wrapping badly */
-        .purchases-table thead th,
-        .purchases-table tbody td {
-            white-space: nowrap;
-        }
-
-        /* Allow long service title to wrap (optional) */
-        .purchases-table td:nth-child(3) {
-            white-space: normal;
-            min-width: 220px;
-        }
-    </style>
 
 @endsection

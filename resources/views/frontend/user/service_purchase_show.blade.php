@@ -33,6 +33,16 @@
 
                             <hr>
 
+                            @php
+                                $cleanerName = optional(optional($booking->cleanerAssign)->cleaner)->name;
+
+                                $dateText = $booking->booking_date ? \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') : 'N/A';
+
+                                $timeText = $booking->booking_start_at && $booking->booking_end_at ? \Carbon\Carbon::parse($booking->booking_start_at)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($booking->booking_end_at)->format('h:i A') : 'Time not set yet';
+
+                                $progressText = ucfirst(str_replace('_', ' ', $booking->progress_status ?? 'pending'));
+                            @endphp
+
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <h6 class="mb-2">Customer</h6>
@@ -44,8 +54,11 @@
                                 <div class="col-md-6">
                                     <h6 class="mb-2">Booking</h6>
                                     <div><strong>Service:</strong> {{ optional($booking->service)->service_title ?? 'N/A' }}</div>
-                                    <div><strong>Date:</strong> {{ optional($booking->booking_date)->format('d M Y') }}</div>
-                                    <div><strong>Status:</strong> {{ ucfirst($booking->status) }}</div>
+                                    <div><strong>Date:</strong> {{ $dateText }}</div>
+                                    <div><strong>Time:</strong> {{ $timeText }}</div>
+                                    <div><strong>Cleaner:</strong> {{ $cleanerName ?? 'Not assigned yet' }}</div>
+                                    <div><strong>Booking Status:</strong> {{ ucfirst($booking->status) }}</div>
+                                    <div><strong>Progress Status:</strong> {{ $progressText }}</div>
                                 </div>
 
                                 <div class="col-md-6">

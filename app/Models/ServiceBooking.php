@@ -10,6 +10,8 @@ class ServiceBooking extends Model
 
     protected $casts = [
         'booking_date' => 'date',
+        'booking_start_at' => 'datetime',
+        'booking_end_at' => 'datetime',
     ];
 
     public function service()
@@ -22,9 +24,15 @@ class ServiceBooking extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Cleaner assignments
+    // ✅ If you want history / multiple assignments keep this
     public function cleanerAssigns()
     {
         return $this->hasMany(CleanerAssign::class, 'job_id');
+    }
+
+    // ✅ Current / latest assignment (dashboard friendly)
+    public function cleanerAssign()
+    {
+        return $this->hasOne(CleanerAssign::class, 'job_id');
     }
 }

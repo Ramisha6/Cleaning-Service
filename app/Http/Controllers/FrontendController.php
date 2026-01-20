@@ -165,7 +165,13 @@ class FrontendController extends Controller
     {
         $user = Auth::user();
 
-        $servicePurchases = ServiceBooking::with('service')->where('user_id', $user->id)->latest()->get();
+        $servicePurchases = ServiceBooking::with([
+            'service',
+            'cleanerAssign.cleaner', // ✅ cleaner name
+        ])
+            ->where('user_id', $user->id)
+            ->latest()
+            ->get();
 
         return view('frontend.user.dashboard', compact('servicePurchases'));
     }
