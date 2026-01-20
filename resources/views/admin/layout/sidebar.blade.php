@@ -22,18 +22,21 @@
     @endphp
 
     <li class="nav-item {{ $sliderOpen ? 'active' : '' }}">
-        <a class="nav-link {{ $sliderOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse" data-target="#collapseSlider" aria-expanded="{{ $sliderOpen ? 'true' : 'false' }}">
+        <a class="nav-link {{ $sliderOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse"
+            data-target="#collapseSlider" aria-expanded="{{ $sliderOpen ? 'true' : 'false' }}">
             <i class="fas fa-fw fa-table"></i>
             <span>Slider</span>
         </a>
 
         <div id="collapseSlider" class="collapse {{ $sliderOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item {{ request()->routeIs('admin.slider.list') ? 'active' : '' }}" href="{{ route('admin.slider.list') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.slider.list') ? 'active' : '' }}"
+                    href="{{ route('admin.slider.list') }}">
                     Slider List
                 </a>
 
-                <a class="collapse-item {{ request()->routeIs('admin.slider.add') ? 'active' : '' }}" href="{{ route('admin.slider.add') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.slider.add') ? 'active' : '' }}"
+                    href="{{ route('admin.slider.add') }}">
                     Add Slider
                 </a>
             </div>
@@ -46,18 +49,21 @@
     @endphp
 
     <li class="nav-item {{ $servicesOpen ? 'active' : '' }}">
-        <a class="nav-link {{ $servicesOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse" data-target="#collapseServices" aria-expanded="{{ $servicesOpen ? 'true' : 'false' }}">
+        <a class="nav-link {{ $servicesOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse"
+            data-target="#collapseServices" aria-expanded="{{ $servicesOpen ? 'true' : 'false' }}">
             <i class="fas fa-fw fa-table"></i>
             <span>Services</span>
         </a>
 
         <div id="collapseServices" class="collapse {{ $servicesOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item {{ request()->routeIs('admin.Service.list') ? 'active' : '' }}" href="{{ route('admin.Service.list') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.Service.list') ? 'active' : '' }}"
+                    href="{{ route('admin.Service.list') }}">
                     Service List
                 </a>
 
-                <a class="collapse-item {{ request()->routeIs('admin.Service.add') ? 'active' : '' }}" href="{{ route('admin.Service.add') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.Service.add') ? 'active' : '' }}"
+                    href="{{ route('admin.Service.add') }}">
                     Add Service
                 </a>
             </div>
@@ -70,14 +76,16 @@
     @endphp
 
     <li class="nav-item {{ $bookingOpen ? 'active' : '' }}">
-        <a class="nav-link {{ $bookingOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse" data-target="#collapseBookings" aria-expanded="{{ $bookingOpen ? 'true' : 'false' }}">
+        <a class="nav-link {{ $bookingOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse"
+            data-target="#collapseBookings" aria-expanded="{{ $bookingOpen ? 'true' : 'false' }}">
             <i class="fas fa-fw fa-receipt"></i>
             <span>Bookings</span>
         </a>
 
         <div id="collapseBookings" class="collapse {{ $bookingOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item {{ request()->routeIs('admin.Booking.list') ? 'active' : '' }}" href="{{ route('admin.Booking.list') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.Booking.list') ? 'active' : '' }}"
+                    href="{{ route('admin.Booking.list') }}">
                     Booking List
                 </a>
             </div>
@@ -90,7 +98,8 @@
     @endphp
 
     <li class="nav-item {{ $cleanerOpen ? 'active' : '' }}">
-        <a class="nav-link {{ $cleanerOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse" data-target="#collapseCleaners" aria-expanded="{{ $cleanerOpen ? 'true' : 'false' }}">
+        <a class="nav-link {{ $cleanerOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse"
+            data-target="#collapseCleaners" aria-expanded="{{ $cleanerOpen ? 'true' : 'false' }}">
             <i class="fas fa-fw fa-users"></i>
             <span>Cleaners</span>
         </a>
@@ -98,11 +107,13 @@
         <div id="collapseCleaners" class="collapse {{ $cleanerOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
 
-                <a class="collapse-item {{ request()->routeIs('admin.cleaner.list') ? 'active' : '' }}" href="{{ route('admin.cleaner.list') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.cleaner.list') ? 'active' : '' }}"
+                    href="{{ route('admin.cleaner.list') }}">
                     Cleaner List
                 </a>
 
-                <a class="collapse-item {{ request()->routeIs('admin.cleaner.add') ? 'active' : '' }}" href="{{ route('admin.cleaner.add') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.cleaner.add') ? 'active' : '' }}"
+                    href="{{ route('admin.cleaner.add') }}">
                     Add Cleaner
                 </a>
 
@@ -116,7 +127,8 @@
     @endphp
 
     <li class="nav-item {{ $eventOpen ? 'active' : '' }}">
-        <a class="nav-link {{ $eventOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse" data-target="#collapseEvents" aria-expanded="{{ $eventOpen ? 'true' : 'false' }}">
+        <a class="nav-link {{ $eventOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse"
+            data-target="#collapseEvents" aria-expanded="{{ $eventOpen ? 'true' : 'false' }}">
             <i class="fas fa-fw fa-users"></i>
             <span>Events</span>
         </a>
@@ -124,11 +136,13 @@
         <div id="collapseEvents" class="collapse {{ $eventOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
 
-                <a class="collapse-item {{ request()->routeIs('admin.event.list') ? 'active' : '' }}" href="{{ route('admin.event.list') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.event.list') ? 'active' : '' }}"
+                    href="{{ route('admin.event.list') }}">
                     Event List
                 </a>
 
-                <a class="collapse-item {{ request()->routeIs('admin.event.add') ? 'active' : '' }}" href="{{ route('admin.event.add') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.event.add') ? 'active' : '' }}"
+                    href="{{ route('admin.event.add') }}">
                     Add Event
                 </a>
 
@@ -142,15 +156,18 @@
     @endphp
 
     <li class="nav-item {{ $contactMessageOpen ? 'active' : '' }}">
-        <a class="nav-link {{ $contactMessageOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse" data-target="#collapseContactMessages" aria-expanded="{{ $contactMessageOpen ? 'true' : 'false' }}">
+        <a class="nav-link {{ $contactMessageOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse"
+            data-target="#collapseContactMessages" aria-expanded="{{ $contactMessageOpen ? 'true' : 'false' }}">
             <i class="fas fa-fw fa-users"></i>
             <span>Contact Message</span>
         </a>
 
-        <div id="collapseContactMessages" class="collapse {{ $contactMessageOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
+        <div id="collapseContactMessages" class="collapse {{ $contactMessageOpen ? 'show' : '' }}"
+            data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
 
-                <a class="collapse-item {{ request()->routeIs('admin.contact_message.list') ? 'active' : '' }}" href="{{ route('admin.contact_message.list') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.contact_message.list') ? 'active' : '' }}"
+                    href="{{ route('admin.contact_message.list') }}">
                     Message List
                 </a>
 

@@ -65,10 +65,16 @@
 
     @php
         $cleanerName = optional(optional($booking->cleanerAssign)->cleaner)->name;
+        $cleanerPhone = optional(optional($booking->cleanerAssign)->cleaner)->phone;
 
         $dateText = $booking->booking_date ? \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') : 'N/A';
 
-        $timeText = $booking->booking_start_at && $booking->booking_end_at ? \Carbon\Carbon::parse($booking->booking_start_at)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($booking->booking_end_at)->format('h:i A') : 'Time not set yet';
+        $timeText =
+            $booking->booking_start_at && $booking->booking_end_at
+                ? \Carbon\Carbon::parse($booking->booking_start_at)->format('h:i A') .
+                    ' - ' .
+                    \Carbon\Carbon::parse($booking->booking_end_at)->format('h:i A')
+                : 'Time not set yet';
 
         $progressText = ucfirst(str_replace('_', ' ', $booking->progress_status ?? 'pending'));
     @endphp
@@ -76,7 +82,8 @@
     <div class="inv-wrap">
         <div class="no-print d-flex gap-2">
             <button class="btn btn-dark btn-sm" onclick="window.print()">Print</button>
-            <a class="btn btn-outline-secondary btn-sm" href="{{ route('user.service.purchase.invoice', $booking->id) }}">Back</a>
+            <a class="btn btn-outline-secondary btn-sm"
+                href="{{ route('user.service.purchase.invoice', $booking->id) }}">Back</a>
         </div>
 
         <div class="inv-box">
@@ -102,6 +109,7 @@
                     <div><strong>Date:</strong> {{ $dateText }}</div>
                     <div><strong>Time:</strong> {{ $timeText }}</div>
                     <div><strong>Cleaner:</strong> {{ $cleanerName ?? 'Not assigned yet' }}</div>
+                    <div><strong>Cleaner:</strong> {{ $cleanerPhone ?? 'Not assigned yet' }}</div>
                     <div><strong>Progress:</strong> {{ $progressText }}</div>
                     <div><strong>Booking Status:</strong> {{ ucfirst($booking->status) }}</div>
                 </div>

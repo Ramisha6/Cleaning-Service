@@ -9,7 +9,8 @@
                         <ul>
                             <li><i class="far fa-envelope"></i><a href="mailto:info@example.com">smartclean@gmail.com</a>
                             </li>
-                            <li class="d-lg-inline d-none"><i class="far fa-clock"></i>Satday - Thrusday 8:00 AM - 6:00 PM
+                            <li class="d-lg-inline d-none"><i class="far fa-clock"></i>Saturday - Thrusday 8:00 AM - 6:00
+                                PM
                             </li>
                         </ul>
                     </div>
@@ -21,6 +22,7 @@
                             <a href="#"><i class="fab fa-facebook-f"></i></a>
                             <a href="#"><i class="fab fa-linkedin-in"></i></a>
                             <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
                 </div>
@@ -100,7 +102,8 @@
                                             </div>
 
                                             <div class="user-menu">
-                                                <a href="{{ $user->role === 'admin' ? route('admin.dashboard') : route('dashboard') }}">
+                                                <a
+                                                    href="{{ $user->role === 'admin' ? route('admin.dashboard') : route('dashboard') }}">
                                                     <i class="far fa-user-circle"></i> Dashboard
                                                 </a>
 

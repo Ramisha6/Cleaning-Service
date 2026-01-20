@@ -41,7 +41,9 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>
-                                        <img src="{{ !empty($service->service_image) ? url('upload/service_image/' . $service->service_image) : url('upload/no_image.jpg') }}" alt="{{ $service->service_title }}" class="img-fluid d-block" style="width: 150px;">
+                                        <img src="{{ !empty($service->service_image) ? url('upload/service_image/' . $service->service_image) : url('upload/no_image.jpg') }}"
+                                            alt="{{ $service->service_title }}" class="img-fluid d-block"
+                                            style="width: 150px;">
                                     </td>
                                     <td>{{ $service->service_title }}</td>
                                     <td>{{ $service->service_price }}</td>
@@ -54,8 +56,11 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.Service.edit', $service->id) }}" class="btn btn-sm btn-info">Edit</a>
-                                        <a href="{{ route('admin.Service.delete', $service->id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                                        <a href="{{ route('admin.Service.edit', $service->id) }}"
+                                            class="btn btn-sm btn-info">Edit</a>
+                                        <a href="{{ route('admin.Service.delete', $service->id) }}"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure?')">Delete</a>
                                     </td>
                                 </tr>
                             @endforeach

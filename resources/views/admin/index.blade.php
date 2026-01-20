@@ -9,7 +9,7 @@
     </div>
 
     <div class="row mb-3">
-        <!-- Earnings (Annual) Card Example -->
+        <!-- Booking Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card h-100">
                 <div class="card-body">
@@ -28,6 +28,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Pending Requests Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card h-100">
@@ -187,7 +188,8 @@
                                             @elseif($b->payment_status === 'rejected')
                                                 <span class="badge badge-danger">Rejected</span>
                                             @else
-                                                <span class="badge badge-secondary">{{ ucfirst($b->payment_status) }}</span>
+                                                <span
+                                                    class="badge badge-secondary">{{ ucfirst($b->payment_status) }}</span>
                                             @endif
 
                                         </td>
@@ -212,7 +214,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.Booking.show', $b->id) }}" class="btn btn-sm btn-info">
+                                            <a href="{{ route('admin.Booking.show', $b->id) }}"
+                                                class="btn btn-sm btn-info">
                                                 View
                                             </a>
                                         </td>
@@ -274,7 +277,8 @@
 
 
     <!-- Modal Logout -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

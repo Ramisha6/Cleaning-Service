@@ -24,6 +24,10 @@ class FrontendController extends Controller
 
         return view('frontend.index', compact('services', 'slider', 'events'));
     }
+    public function Test()
+    {
+        return view('frontend.test');
+    }
 
     public function Services()
     {

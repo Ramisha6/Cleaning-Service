@@ -17,11 +17,13 @@
                                 </div>
 
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('user.service.purchase.invoice', $booking->id) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('user.service.purchase.invoice', $booking->id) }}"
+                                        class="btn btn-primary btn-sm">
                                         View Invoice
                                     </a>
 
-                                    <a href="{{ route('user.service.purchase.invoice.print', $booking->id) }}" class="btn btn-outline-dark btn-sm" target="_blank">
+                                    <a href="{{ route('user.service.purchase.invoice.print', $booking->id) }}"
+                                        class="btn btn-outline-dark btn-sm" target="_blank">
                                         Print
                                     </a>
 
@@ -36,9 +38,18 @@
                             @php
                                 $cleanerName = optional(optional($booking->cleanerAssign)->cleaner)->name;
 
-                                $dateText = $booking->booking_date ? \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') : 'N/A';
+                                $cleanerPhone = optional(optional($booking->cleanerAssign)->cleaner)->phone;
 
-                                $timeText = $booking->booking_start_at && $booking->booking_end_at ? \Carbon\Carbon::parse($booking->booking_start_at)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($booking->booking_end_at)->format('h:i A') : 'Time not set yet';
+                                $dateText = $booking->booking_date
+                                    ? \Carbon\Carbon::parse($booking->booking_date)->format('d M Y')
+                                    : 'N/A';
+
+                                $timeText =
+                                    $booking->booking_start_at && $booking->booking_end_at
+                                        ? \Carbon\Carbon::parse($booking->booking_start_at)->format('h:i A') .
+                                            ' - ' .
+                                            \Carbon\Carbon::parse($booking->booking_end_at)->format('h:i A')
+                                        : 'Time not set yet';
 
                                 $progressText = ucfirst(str_replace('_', ' ', $booking->progress_status ?? 'pending'));
                             @endphp
@@ -53,10 +64,12 @@
 
                                 <div class="col-md-6">
                                     <h6 class="mb-2">Booking</h6>
-                                    <div><strong>Service:</strong> {{ optional($booking->service)->service_title ?? 'N/A' }}</div>
+                                    <div><strong>Service:</strong> {{ optional($booking->service)->service_title ?? 'N/A' }}
+                                    </div>
                                     <div><strong>Date:</strong> {{ $dateText }}</div>
                                     <div><strong>Time:</strong> {{ $timeText }}</div>
-                                    <div><strong>Cleaner:</strong> {{ $cleanerName ?? 'Not assigned yet' }}</div>
+                                    <div><strong>Cleaner Name:</strong> {{ $cleanerName ?? 'Not assigned yet' }}</div>
+                                    <div><strong>Cleaner Phone:</strong> {{ $cleanerPhone ?? 'Not assigned yet' }}</div>
                                     <div><strong>Booking Status:</strong> {{ ucfirst($booking->status) }}</div>
                                     <div><strong>Progress Status:</strong> {{ $progressText }}</div>
                                 </div>
