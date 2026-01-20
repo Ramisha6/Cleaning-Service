@@ -136,4 +136,26 @@
         </div>
     </li>
 
+    {{-- ================= Cleaners ================= --}}
+    @php
+        $contactMessageOpen = request()->routeIs('admin.contact_message.*');
+    @endphp
+
+    <li class="nav-item {{ $contactMessageOpen ? 'active' : '' }}">
+        <a class="nav-link {{ $contactMessageOpen ? '' : 'collapsed' }}" href="#" data-toggle="collapse" data-target="#collapseContactMessages" aria-expanded="{{ $contactMessageOpen ? 'true' : 'false' }}">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Contact Message</span>
+        </a>
+
+        <div id="collapseContactMessages" class="collapse {{ $contactMessageOpen ? 'show' : '' }}" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+
+                <a class="collapse-item {{ request()->routeIs('admin.contact_message.list') ? 'active' : '' }}" href="{{ route('admin.contact_message.list') }}">
+                    Message List
+                </a>
+
+            </div>
+        </div>
+    </li>
+
 </ul>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CleanerController;
 use App\Http\Controllers\CleaningServiceController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
@@ -37,6 +38,7 @@ Route::middleware('web')->group(function () {
 
     // Contact Us
     Route::get('/contact-us', [FrontendController::class, 'ContactUs'])->name('contact.us');
+    Route::post('/contact-us/store', [FrontendController::class, 'ContactStore'])->name('contact.store');
 });
 
 // #################### Auth & Admin Login ####################
@@ -59,7 +61,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard/service-purchases/{booking}/invoice', [FrontendController::class, 'ServicePurchaseInvoice'])->name('user.service.purchase.invoice');
     Route::get('/dashboard/service-purchases/{booking}/invoice/print', [FrontendController::class, 'ServicePurchaseInvoicePrint'])->name('user.service.purchase.invoice.print');
 });
-
 
 // #################### Admin Panel Routes (Only admins) ####################
 Route::prefix('admin')
@@ -123,6 +124,11 @@ Route::prefix('admin')
             Route::get('/event/edit/{id}', 'edit')->name('admin.event.edit');
             Route::post('/event/update/{id}', 'update')->name('admin.event.update');
             Route::get('/event/delete/{id}', 'delete')->name('admin.event.delete');
+        });
+
+        Route::controller(ContactMessageController::class)->group(function () {
+            Route::get('/contact-message/list', 'list')->name('admin.contact_message.list');
+            Route::get('/contact-message/delete/{id}', 'delete')->name('admin.contact_message.delete');
         });
 
         // ✅ Admin 404 fallback (ONLY for /admin/*)

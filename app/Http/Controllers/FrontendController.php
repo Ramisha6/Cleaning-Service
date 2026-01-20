@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CleaningServices;
+use App\Models\ContactMessage;
 use App\Models\Event;
 use App\Models\ServiceBooking;
 use App\Models\Slider;
@@ -259,4 +260,39 @@ class FrontendController extends Controller
     {
         return view('frontend.pages.contact_us');
     } // End Method
+
+    public function ContactStore(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'phone' => ['required', 'string', 'max:30'],
+                'email' => ['required', 'email', 'max:255'],
+                'subject' => ['required', 'string', 'max:255'],
+                'message' => ['required', 'string', 'max:3000'],
+            ],
+            [
+                'name.required' => 'Name is required',
+                'phone.required' => 'Phone is required',
+                'email.required' => 'Email is required',
+                'subject.required' => 'Subject is required',
+                'message.required' => 'Message is required',
+            ],
+        );
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        ContactMessage::create([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'subject' => $request->subject,
+            'message' => $request->message,
+        ]);
+
+        return redirect()->back()->with('message', 'Your message has been sent successfully!')->with('alert-type', 'success');
+    }
 }
