@@ -52,10 +52,14 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard', [FrontendController::class, 'UserDashboard'])->name('dashboard');
 
+    // ✅ profile update
+    Route::post('/dashboard/profile/update', [FrontendController::class, 'updateProfile'])->name('user.profile.update');
+
     Route::get('/dashboard/service-purchases/{booking}', [FrontendController::class, 'ServicePurchaseShow'])->name('user.service.purchase.show');
     Route::get('/dashboard/service-purchases/{booking}/invoice', [FrontendController::class, 'ServicePurchaseInvoice'])->name('user.service.purchase.invoice');
     Route::get('/dashboard/service-purchases/{booking}/invoice/print', [FrontendController::class, 'ServicePurchaseInvoicePrint'])->name('user.service.purchase.invoice.print');
 });
+
 
 // #################### Admin Panel Routes (Only admins) ####################
 Route::prefix('admin')

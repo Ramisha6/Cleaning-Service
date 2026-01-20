@@ -176,6 +176,37 @@ class FrontendController extends Controller
         return view('frontend.user.dashboard', compact('servicePurchases'));
     }
 
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'phone' => ['required', 'string', 'max:30'],
+            ],
+            [
+                'name.required' => 'Name is required',
+                'phone.required' => 'Phone is required',
+            ],
+        );
+
+        if ($validator->fails()) {
+            return redirect()->route('dashboard')->withErrors($validator)->withInput()->with('open_tab', 'profile'); // ✅ profile tab open রাখবে
+        }
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $user->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+        ]);
+
+        return redirect()->route('dashboard')->with('message', 'Profile updated successfully!')->with('alert-type', 'success')->with('open_tab', 'profile');
+    }
+
     public function ServicePurchaseShow(ServiceBooking $booking)
     {
         abort_if($booking->user_id !== Auth::id(), 403);
