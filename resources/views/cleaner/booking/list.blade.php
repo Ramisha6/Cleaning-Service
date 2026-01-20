@@ -26,7 +26,7 @@
                                 <th>Customer</th>
                                 <th>Service</th>
                                 <th>Date</th>
-                                <th>Status</th>
+                                <th>Progress Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -45,11 +45,35 @@
                                     </td>
                                     <td>{{ optional($booking->booking->service)->service_title ?? 'N/A' }}</td>
                                     <td>
-                                        <strong>{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</strong><br>
-                                        <small class="text-muted">{{ \Carbon\Carbon::parse($booking->created_at)->format('h:i A') }}</small>
+                                        {{-- Date --}}
+                                        <strong>
+                                            {{ $booking->booking?->booking_date ? \Carbon\Carbon::parse($booking->booking->booking_date)->format('d M Y') : 'N/A' }}
+                                        </strong>
+                                        <br>
+
+                                        {{-- Time (admin set) --}}
+                                        @if ($booking->booking?->booking_start_at && $booking->booking?->booking_end_at)
+                                            <small class="badge badge-dark">
+                                                {{ \Carbon\Carbon::parse($booking->booking->booking_start_at)->format('h:i A') }}
+                                                -
+                                                {{ \Carbon\Carbon::parse($booking->booking->booking_end_at)->format('h:i A') }}
+                                            </small>
+                                        @else
+                                            <small class="badge badge-dark">Time not set yet</small>
+                                        @endif
                                     </td>
+
                                     <td>
-                                        <span class="badge badge-{{ $booking->status == 'completed' ? 'success' : 'warning' }}">{{ $booking->status }}</span>
+                                        @php
+                                            $statusConfig = [
+                                                'pending' => ['class' => 'badge-warning', 'label' => 'Pending'],
+                                                'in_progress' => ['class' => 'badge-primary', 'label' => 'In Progress'],
+                                                'completed' => ['class' => 'badge-success', 'label' => 'Completed'],
+                                                'rejected' => ['class' => 'badge-danger', 'label' => 'Rejected'],
+                                            ];
+                                            $config = $statusConfig[$booking->status] ?? ['class' => 'badge-secondary', 'label' => ucfirst($booking->status)];
+                                        @endphp
+                                        <span class="badge {{ $config['class'] }}">{{ $config['label'] }}</span>
                                     </td>
 
                                     <td>
@@ -96,7 +120,7 @@
                         <div class="form-group">
                             <label>Status</label>
                             <select name="status" id="status" class="form-control" required>
-                                <option value="pending">Pending</option>
+                                <option value="pending" disabled>Pending</option>
                                 <option value="in_progress">In Progress</option>
                                 <option value="completed">Completed</option>
                                 <option value="rejected">Rejected</option>

@@ -20,10 +20,26 @@
                     <p class="mb-1">{{ $booking->email ?? 'N/A' }}</p>
                     <p class="mb-1">{{ $booking->phone }}</p>
                 </div>
+
                 <div class="col-md-6 text-md-right">
                     <h6><strong>Service</strong></h6>
                     <p class="mb-1">{{ optional($booking->service)->service_title ?? 'N/A' }}</p>
-                    <p class="mb-1">Booking Date: {{ optional($booking->booking_date)->format('d M Y') }}</p>
+
+                    <p class="mb-1">
+                        Booking Date:
+                        {{ $booking->booking_date ? \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') : 'N/A' }}
+                    </p>
+
+                    <p class="mb-1">
+                        Booking Time:
+                        @if ($booking->booking_start_at && $booking->booking_end_at)
+                            {{ \Carbon\Carbon::parse($booking->booking_start_at)->format('h:i A') }}
+                            -
+                            {{ \Carbon\Carbon::parse($booking->booking_end_at)->format('h:i A') }}
+                        @else
+                            <span class="text-muted">Time not set yet</span>
+                        @endif
+                    </p>
                 </div>
             </div>
 
@@ -42,7 +58,9 @@
                             <td>
                                 {{ optional($booking->service)->service_title ?? 'Service' }}
                                 @if (optional($booking->service)->service_duration)
-                                    <div class="text-muted small">Duration: {{ $booking->service->service_duration }}</div>
+                                    <div class="text-muted small">
+                                        Duration: {{ $booking->service->service_duration }}
+                                    </div>
                                 @endif
                             </td>
                             <td class="text-right">
@@ -68,7 +86,6 @@
                 <p class="mb-1"><strong>bKash Number:</strong> {{ $booking->bkash_number ?? 'N/A' }}</p>
                 <p class="mb-0"><strong>Transaction ID:</strong> {{ $booking->transaction_id ?? 'N/A' }}</p>
             @endif
-
         </div>
     </div>
 @endsection

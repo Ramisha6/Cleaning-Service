@@ -17,6 +17,7 @@ class ServiceBookingController extends Controller
         $booking_list = ServiceBooking::with(['user', 'service'])
             ->latest()
             ->get();
+
         $cleaners = User::where('role', 'cleaner')->get();
 
         return view('backend.service_booking.list', compact('booking_list', 'cleaners'));
@@ -25,7 +26,6 @@ class ServiceBookingController extends Controller
     public function show($id)
     {
         $booking = ServiceBooking::with(['user', 'service'])->findOrFail($id);
-
         return view('backend.service_booking.show', compact('booking'));
     }
 
@@ -80,43 +80,150 @@ class ServiceBookingController extends Controller
     public function invoiceDownload($id)
     {
         $booking = ServiceBooking::with(['user', 'service'])->findOrFail($id);
-
-        // This uses the "print invoice" approach (browser Save as PDF)
         return response()->view('backend.service_booking.invoice_print', compact('booking'))->header('Content-Type', 'text/html');
     }
 
+    /**
+     * ✅ Admin modal availability check
+     * GET: cleaner_id, job_id, start_time
+     */
+    public function checkCleanerAvailability(Request $request)
+    {
+        $request->validate([
+            'cleaner_id' => 'required|integer',
+            'job_id' => 'required|exists:service_bookings,id',
+            'start_time' => 'required',
+        ]);
+
+        $booking = ServiceBooking::with('service')->findOrFail($request->job_id);
+
+        $bookingDate = Carbon::parse($booking->booking_date)->toDateString(); // YYYY-MM-DD only
+        $startAt = Carbon::parse($bookingDate . ' ' . $request->start_time);
+
+        $durationMinutes = $this->getDurationMinutes($booking->service);
+        if ($durationMinutes <= 0) {
+            return response()->json(
+                [
+                    'available' => false,
+                    'message' => 'Service duration set kora nai (minutes)',
+                ],
+                422,
+            );
+        }
+
+        $endAt = $startAt->copy()->addMinutes($durationMinutes);
+
+        $hasOverlap = CleanerAssign::query()
+            ->where('cleaner_id', $request->cleaner_id)
+            ->whereIn('status', ['pending', 'in_progress'])
+            ->whereHas('booking', function ($q) use ($startAt, $endAt) {
+                $q->where('status', '!=', 'cancelled')->whereNotNull('booking_start_at')->whereNotNull('booking_end_at')->where('booking_start_at', '<', $endAt)->where('booking_end_at', '>', $startAt);
+            })
+            ->exists();
+
+        return response()->json([
+            'available' => !$hasOverlap,
+            'message' => $hasOverlap ? 'Busy' : 'Available',
+        ]);
+    }
+
+    /**
+     * ✅ Admin assign cleaner + set booking_start_at/end_at
+     * POST: cleaner_id, job_id, start_time
+     */
     public function CleanerAssign(Request $request)
     {
         $request->validate([
             'cleaner_id' => 'required|integer',
-            'job_id' => 'required|integer',
+            'job_id' => 'required|exists:service_bookings,id',
+            'start_time' => 'required',
         ]);
 
         DB::beginTransaction();
         try {
-            CleanerAssign::create([
-                'cleaner_id' => $request->cleaner_id,
-                'job_id' => $request->job_id,
-                'status' => 'pending',
+            $booking = ServiceBooking::with('service')->findOrFail($request->job_id);
+
+            if ($booking->status === 'cancelled') {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'Cancelled booking e cleaner assign kora jabe na',
+                    ],
+                    422,
+                );
+            }
+
+            // ✅ booking_date + admin selected time
+            $bookingDate = Carbon::parse($booking->booking_date)->toDateString(); // YYYY-MM-DD only
+            $startAt = Carbon::parse($bookingDate . ' ' . $request->start_time);
+
+            // ✅ duration from service_duration
+            $durationMinutes = $this->getDurationMinutes($booking->service);
+
+            if ($durationMinutes <= 0) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'Service duration set kora nai (minutes)',
+                    ],
+                    422,
+                );
+            }
+
+            $endAt = $startAt->copy()->addMinutes($durationMinutes);
+
+            // 🔴 Overlap check
+            $busy = CleanerAssign::query()
+                ->where('cleaner_id', $request->cleaner_id)
+                ->whereIn('status', ['pending', 'in_progress'])
+                ->whereHas('booking', function ($q) use ($startAt, $endAt) {
+                    $q->where('status', '!=', 'cancelled')->whereNotNull('booking_start_at')->whereNotNull('booking_end_at')->where('booking_start_at', '<', $endAt)->where('booking_end_at', '>', $startAt);
+                })
+                ->exists();
+
+            if ($busy) {
+                return response()->json(
+                    [
+                        'success' => false,
+                        'message' => 'Ei time e cleaner busy ache',
+                    ],
+                    422,
+                );
+            }
+
+            // ✅ booking time save
+            $booking->update([
+                'booking_start_at' => $startAt,
+                'booking_end_at' => $endAt,
+                'progress_status' => 'in_progress',
             ]);
 
-            ServiceBooking::where('id', $request->job_id)
-                ->where('status', '!=', 'cancelled')
-                ->update(['progress_status' => 'in_progress']);
+            // ✅ HERE → CleanerAssign replace হবে
+            CleanerAssign::updateOrCreate(
+                ['job_id' => $booking->id],
+                [
+                    'cleaner_id' => $request->cleaner_id,
+                    'status' => 'in_progress',
+                ],
+            );
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Cleaner assigned successfully.',
+                'message' => 'Cleaner assign & time set successful',
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error assigning cleaner: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ]);
+            Log::error('CleanerAssign error: ' . $e->getMessage());
+
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Server error: ' . $e->getMessage(),
+                ],
+                500,
+            );
         }
     }
 
@@ -128,17 +235,14 @@ class ServiceBookingController extends Controller
 
         $booking = ServiceBooking::findOrFail($id);
 
-        // ✅ Rule: if booking is cancelled, don't allow progress change
         if ($booking->status === 'cancelled') {
             return redirect()->back()->with('message', 'Cancelled booking progress cannot be updated.')->with('alert-type', 'warning');
         }
 
-        // ✅ Rule: must be confirmed before completed (recommended)
         if ($request->progress_status === 'completed' && $booking->status !== 'confirmed') {
             return redirect()->back()->with('message', 'Booking must be confirmed before marking completed.')->with('alert-type', 'warning');
         }
 
-        // ✅ Rule: bKash must be verified before completed (recommended)
         if ($request->progress_status === 'completed' && $booking->payment_method === 'bkash' && $booking->payment_status !== 'verified') {
             return redirect()->back()->with('message', 'bKash payment must be verified before completing.')->with('alert-type', 'warning');
         }
@@ -148,5 +252,22 @@ class ServiceBookingController extends Controller
         ]);
 
         return redirect()->back()->with('message', 'Progress status updated successfully.')->with('alert-type', 'success');
+    }
+
+    private function getDurationMinutes($service): int
+    {
+        $raw = (string) ($service->service_duration ?? '');
+
+        // numeric হলে
+        if (is_numeric(trim($raw))) {
+            return (int) trim($raw);
+        }
+
+        // "Kitchen Clean 30 mins" => 30 extract
+        if (preg_match('/(\d+)/', $raw, $m)) {
+            return (int) $m[1];
+        }
+
+        return 0;
     }
 }

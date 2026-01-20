@@ -46,9 +46,8 @@
 </head>
 
 <body>
-
     <div class="wrap">
-        <div class="no-print d-flex gap-2">
+        <div class="no-print">
             <button class="btn btn-dark btn-sm" onclick="window.print()">Print / Save PDF</button>
         </div>
 
@@ -72,9 +71,23 @@
             <div class="row">
                 <div class="col-6">
                     <strong>Service:</strong> {{ optional($booking->service)->service_title ?? 'N/A' }}<br>
-                    <strong>Booking Date:</strong> {{ optional($booking->booking_date)->format('d M Y') }}<br>
+
+                    <strong>Booking Date:</strong>
+                    {{ $booking->booking_date ? \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') : 'N/A' }}<br>
+
+                    <strong>Booking Time:</strong>
+                    @if ($booking->booking_start_at && $booking->booking_end_at)
+                        {{ \Carbon\Carbon::parse($booking->booking_start_at)->format('h:i A') }}
+                        -
+                        {{ \Carbon\Carbon::parse($booking->booking_end_at)->format('h:i A') }}
+                    @else
+                        <span class="muted">Time not set yet</span>
+                    @endif
+                    <br>
+
                     <strong>Status:</strong> {{ ucfirst($booking->status) }}
                 </div>
+
                 <div class="col-6 text-right">
                     <strong>Payment:</strong> {{ strtoupper($booking->payment_method) }}<br>
                     <strong>Payment Status:</strong> {{ ucfirst($booking->payment_status) }}<br>
@@ -99,7 +112,9 @@
                         <td>
                             {{ optional($booking->service)->service_title ?? 'Service' }}
                             @if (optional($booking->service)->service_duration)
-                                <div class="muted small">Duration: {{ $booking->service->service_duration }}</div>
+                                <div class="muted small">
+                                    Duration: {{ $booking->service->service_duration }}
+                                </div>
                             @endif
                         </td>
                         <td class="text-right">৳{{ optional($booking->service)->service_price ?? '0' }}</td>
@@ -121,7 +136,6 @@
             @endif
         </div>
     </div>
-
 </body>
 
 </html>

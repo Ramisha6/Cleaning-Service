@@ -90,6 +90,8 @@ Route::prefix('admin')
             Route::post('/booking/cleaner/assign', 'CleanerAssign')->name('admin.Booking.cleaner.assign');
 
             Route::post('/booking/progress/{id}', 'updateProgressStatus')->name('admin.booking.progress.update');
+
+            Route::get('/booking/cleaner/availability', 'checkCleanerAvailability')->name('admin.cleaner.availability');
         });
 
         Route::controller(CleanerController::class)->group(function () {
@@ -140,27 +142,18 @@ Route::get('/cleaner/login', function () {
 
 Route::post('/cleaner-login-store', [CleanerController::class, 'CleanerLoginStore'])->name('cleaner.login.store');
 
-// -------------------- Cleaner Area (example placeholder) --------------------
-// Add cleaner routes here when you’re ready
+// #################### Cleaner Area (example placeholder ####################
 Route::middleware(['auth', 'role:cleaner'])->group(function () {
-    // Cleaner Dashboard
-    Route::get('/cleaner/dashboard', function () {
-        $admin_data = Auth::user();
-        $total_bookings = CleanerAssign::where('cleaner_id', $admin_data->id)->with('booking')->count();
-        $pending_bookings = CleanerAssign::where('cleaner_id', $admin_data->id)->where('status', 'pending')->with('booking')->count();
-        $in_progress_bookings = CleanerAssign::where('cleaner_id', $admin_data->id)->where('status', 'in_progress')->with('booking')->count();
-        $completed_bookings = CleanerAssign::where('cleaner_id', $admin_data->id)->where('status', 'completed')->with('booking')->count();
-
-        return view('cleaner.index', compact('admin_data', 'total_bookings', 'pending_bookings', 'in_progress_bookings', 'completed_bookings'));
-    })->name('cleaner.dashboard');
+    // ✅ Cleaner Dashboard (controller method)
+    Route::get('/cleaner/dashboard', [CleanerController::class, 'dashboard'])->name('cleaner.dashboard');
 
     // cleaner booking list
     Route::get('/cleaner/booking/list', [CleanerController::class, 'CleanerBookingList'])->name('cleaner.Booking.list');
 
     Route::post('/booking/update-status', [CleanerController::class, 'updateStatus'])->name('cleaner.booking.update.status');
+
     Route::get('/cleaner/show-booking/{id}', [CleanerController::class, 'showBooking'])->name('cleaner.booking.show');
 
-    // ✅ Admin 404 fallback (ONLY for /admin/*)
     Route::fallback(function () {
         return response()->view('cleaner.errors.404', [], 404);
     });

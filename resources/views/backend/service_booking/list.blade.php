@@ -2,7 +2,6 @@
 @section('admin_content')
     <!-- jQuery should be loaded BEFORE your custom scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -38,9 +37,33 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td><strong>{{ $booking->invoice_no }}</strong></td>
-                                    <td>{{ optional($booking->user)->name ?? 'N/A' }}</td>
+                                    <td>
+                                        <div>
+                                            <strong>{{ $booking->user->name }}</strong><br>
+                                            <small>{{ $booking->user->phone }}</small><br>
+                                            <small>{{ $booking->user->email }}</small>
+                                        </div>
+                                    </td>
                                     <td>{{ optional($booking->service)->service_title ?? 'N/A' }}</td>
-                                    <td>{{ optional($booking->booking_date)->format('d M Y') }}</td>
+                                    <td>
+                                        {{-- Date --}}
+                                        <strong>
+                                            {{ $booking->booking_date ? \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') : 'N/A' }}
+                                        </strong>
+                                        <br>
+
+                                        {{-- Time --}}
+                                        @if ($booking->booking_start_at && $booking->booking_end_at)
+                                            <small class="badge badge-dark">
+                                                {{ \Carbon\Carbon::parse($booking->booking_start_at)->format('h:i A') }}
+                                                -
+                                                {{ \Carbon\Carbon::parse($booking->booking_end_at)->format('h:i A') }}
+                                            </small>
+                                        @else
+                                            <small class="badge badge-dark">Time not set</small>
+                                        @endif
+                                    </td>
+
 
                                     <td>
                                         <span class="badge badge-secondary">
@@ -128,23 +151,36 @@
                     </div>
 
                     <div class="modal-body">
+
+                        {{-- ✅ Cleaner select --}}
                         <div class="form-group">
                             <label>Select Cleaner</label>
                             <select name="cleaner_id" id="cleaner_id" class="form-control" required>
                                 <option value="">-- Select Cleaner --</option>
-
-                                {{-- Example --}}
                                 @foreach ($cleaners as $cleaner)
                                     <option value="{{ $cleaner->id }}">
                                         {{ $cleaner->name }}
                                     </option>
                                 @endforeach
                             </select>
+
+                            {{-- ✅ Availability status --}}
+                            <div class="mt-2" id="availabilityBox" style="display:none;">
+                                <span id="availabilityBadge" class="badge"></span>
+                                <small class="d-block mt-1 text-muted" id="availabilityText"></small>
+                            </div>
                         </div>
+
+                        {{-- ✅ এখানে Start Time add হবে (cleaner select এর নিচে) --}}
+                        <div class="form-group">
+                            <label>Start Time</label>
+                            <input type="time" name="start_time" id="start_time" class="form-control" required>
+                        </div>
+
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-success" id="assignBtn" disabled>
                             Assign
                         </button>
                     </div>
@@ -155,12 +191,76 @@
 
 
     <script>
+        let currentJobId = null;
+
+        function resetAvailabilityUI() {
+            $('#availabilityBox').hide();
+            $('#availabilityBadge').removeClass().addClass('badge').text('');
+            $('#availabilityText').text('');
+            $('#assignBtn').prop('disabled', true);
+        }
+
+        function checkAvailability() {
+            const cleanerId = $('#cleaner_id').val();
+            const startTime = $('#start_time').val(); // must be HH:MM (type=time)
+            if (!currentJobId) return resetAvailabilityUI();
+
+            // cleaner/time missing হলে guide দেখাও
+            if (!cleanerId || !startTime) {
+                $('#availabilityBox').show();
+                $('#availabilityBadge').removeClass().addClass('badge badge-secondary').text('Select info');
+                $('#availabilityText').text('Please select cleaner and start time to check availability.');
+                $('#assignBtn').prop('disabled', true);
+                return;
+            }
+
+            $.ajax({
+                url: "{{ route('admin.cleaner.availability') }}",
+                type: "GET",
+                data: {
+                    cleaner_id: cleanerId,
+                    job_id: currentJobId,
+                    start_time: startTime
+                },
+                success: function(res) {
+                    $('#availabilityBox').show();
+                    $('#availabilityText').text(res.message || '');
+
+                    if (res.available) {
+                        $('#availabilityBadge').removeClass().addClass('badge badge-success').text('Available');
+                        $('#assignBtn').prop('disabled', false);
+                    } else {
+                        $('#availabilityBadge').removeClass().addClass('badge badge-danger').text('Busy');
+                        $('#assignBtn').prop('disabled', true);
+                    }
+                },
+                error: function(xhr) {
+                    let msg = 'Could not check availability.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
+
+                    $('#availabilityBox').show();
+                    $('#availabilityBadge').removeClass().addClass('badge badge-warning').text('Error');
+                    $('#availabilityText').text(msg);
+                    $('#assignBtn').prop('disabled', true);
+                }
+            });
+        }
+
+        // open modal
         $(document).on('click', '.assignCleanerBtn', function() {
-            let jobId = $(this).data('id');
-            $('#job_id').val(jobId);
+            currentJobId = $(this).data('id');
+            $('#job_id').val(currentJobId);
+
+            $('#cleaner_id').val('');
+            $('#start_time').val('');
+            resetAvailabilityUI();
         });
 
-        // Submit Form
+        // ✅ both triggers call availability
+        $(document).on('change', '#cleaner_id', checkAvailability);
+        $(document).on('change', '#start_time', checkAvailability);
+
+        // submit
         $('#assignCleanerForm').submit(function(e) {
             e.preventDefault();
 
@@ -171,29 +271,25 @@
                     _token: "{{ csrf_token() }}",
                     job_id: $('#job_id').val(),
                     cleaner_id: $('#cleaner_id').val(),
+                    start_time: $('#start_time').val(),
                 },
                 success: function(response) {
                     alert(response.message);
-
                     $('#assignCleanerModal').modal('hide');
-
                     $('#assignCleanerForm')[0].reset();
-
                     location.reload();
                 },
                 error: function(xhr) {
                     let errorMessage = 'Something went wrong!';
-
+                    if (xhr.responseJSON && xhr.responseJSON.message) errorMessage = xhr.responseJSON.message;
                     if (xhr.responseJSON && xhr.responseJSON.errors) {
-                        errorMessage = Object.values(xhr.responseJSON.errors).flat().join('<br>');
+                        errorMessage = Object.values(xhr.responseJSON.errors).flat().join('\n');
                     }
-
                     alert(errorMessage);
                 }
             });
         });
 
-        // Clean up modal backdrop when closed
         $('#assignCleanerModal').on('hidden.bs.modal', function() {
             $('body').removeClass('modal-open');
             $('.modal-backdrop').remove();

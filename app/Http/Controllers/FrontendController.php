@@ -6,6 +6,7 @@ use App\Models\CleaningServices;
 use App\Models\Event;
 use App\Models\ServiceBooking;
 use App\Models\Slider;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,9 +18,7 @@ class FrontendController extends Controller
     public function Index()
     {
         $services = CleaningServices::where('service_status', 'active')->latest()->get();
-
         $slider = Slider::where('slider_status', 'active')->orderBy('id', 'asc')->get();
-
         $events = Event::where('status', 'active')->orderBy('event_date', 'desc')->get();
 
         return view('frontend.index', compact('services', 'slider', 'events'));
@@ -28,7 +27,6 @@ class FrontendController extends Controller
     public function Services()
     {
         $services = CleaningServices::where('service_status', 'active')->latest()->get();
-
         return view('frontend.pages.services', compact('services'));
     }
 
@@ -43,7 +41,7 @@ class FrontendController extends Controller
 
     public function ServiceBookingStore(Request $request)
     {
-        // ✅ Must be logged in (keep this even if you also add route middleware)
+        // ✅ Must be logged in
         if (!Auth::check()) {
             return redirect()->route('login')->with('message', 'Please login to book a service.')->with('alert-type', 'warning');
         }
@@ -53,10 +51,13 @@ class FrontendController extends Controller
             [
                 'service_id' => ['required', 'integer', 'exists:cleaning_services,id'],
 
-                // User info (name/phone can be entered, email will be forced from account)
+                // User info
                 'name' => ['required', 'string', 'max:255'],
                 'phone' => ['required', 'string', 'max:30'],
+
+                // ✅ booking date + time
                 'date' => ['required', 'date'],
+
                 'note' => ['nullable', 'string', 'max:2000'],
 
                 // Payment
@@ -70,6 +71,7 @@ class FrontendController extends Controller
 
                 'name.required' => 'Name is required.',
                 'phone.required' => 'Phone is required.',
+
                 'date.required' => 'Booking date is required.',
 
                 'payment_method.required' => 'Please select a payment method.',
@@ -88,39 +90,57 @@ class FrontendController extends Controller
             $booking = DB::transaction(function () use ($request) {
                 $user = Auth::user();
 
-                // ✅ Force email from authenticated user (no multiple emails)
+                // ✅ Force email from authenticated user
                 $emailToSave = $user->email;
 
                 // ✅ COD rules: keep bkash fields empty
                 $bkashNumber = $request->payment_method === 'bkash' ? $request->bkash_number : null;
                 $trxId = $request->payment_method === 'bkash' ? $request->transaction_id : null;
 
-                // ✅ payment_status: cod=pending, bkash=unverified (admin will verify)
+                // ✅ payment_status: cod=pending, bkash=unverified
                 $paymentStatus = $request->payment_method === 'bkash' ? 'unverified' : 'pending';
 
-                // ✅ Create booking first (TEMP invoice, then update)
+                // ✅ Load service to calculate duration
+                $service = CleaningServices::findOrFail((int) $request->service_id);
+
+                // ✅ Build start datetime from date + time
+                $start = Carbon::parse($request->date . ' ' . $request->time);
+
+                // ✅ IMPORTANT: service_duration must be minutes (example: "120")
+                $minutes = (int) $service->service_duration;
+
+                // fallback if empty duration
+                if ($minutes <= 0) {
+                    $minutes = 60; // default 60 minutes (change if you want)
+                }
+
+                $end = $start->copy()->addMinutes($minutes);
+
+                // ✅ Create booking
                 $booking = ServiceBooking::create([
                     'invoice_no' => 'TEMP',
-
                     'user_id' => $user->id,
                     'service_id' => (int) $request->service_id,
 
                     'name' => $request->name,
-                    'email' => $emailToSave, // ✅ fixed email
+                    'email' => $emailToSave,
                     'phone' => $request->phone,
-                    'booking_date' => $request->date,
-                    'note' => $request->note,
 
+                    // ✅ user only date gives
+                    'booking_date' => $request->date,
+
+                    // ✅ admin will set later
+                    'booking_start_at' => null,
+                    'booking_end_at' => null,
+
+                    'note' => $request->note,
                     'payment_method' => $request->payment_method,
                     'bkash_number' => $bkashNumber,
                     'transaction_id' => $trxId,
                     'payment_status' => $paymentStatus,
 
-                    // Booking status
                     'status' => 'pending',
-
-                    // ✅ If you have progress_status column, keep this:
-                    // 'progress_status' => 'pending',
+                    'progress_status' => 'pending',
                 ]);
 
                 // ✅ Generate invoice: INV-YYYYMMDD-000001
@@ -145,15 +165,13 @@ class FrontendController extends Controller
     {
         $user = Auth::user();
 
-        // Service Purchases (bookings)
         $servicePurchases = ServiceBooking::with('service')->where('user_id', $user->id)->latest()->get();
 
-        return view('frontend.user.dashboard', compact('servicePurchases')); // add other vars you use
+        return view('frontend.user.dashboard', compact('servicePurchases'));
     }
 
     public function ServicePurchaseShow(ServiceBooking $booking)
     {
-        // Protect: user can only see own booking
         abort_if($booking->user_id !== Auth::id(), 403);
 
         $booking->load('service', 'user');
@@ -176,7 +194,6 @@ class FrontendController extends Controller
 
         $booking->load('service', 'user');
 
-        // Print-optimized view
         return view('frontend.user.service_purchase_invoice_print', compact('booking'));
     }
 

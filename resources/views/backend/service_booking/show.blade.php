@@ -40,7 +40,24 @@
                             <p class="mb-1"><strong>Title:</strong> {{ optional($booking->service)->service_title ?? 'N/A' }}</p>
                             <p class="mb-1"><strong>Price:</strong> ৳{{ optional($booking->service)->service_price ?? '0' }}</p>
                             <p class="mb-1"><strong>Duration:</strong> {{ optional($booking->service)->service_duration ?? 'N/A' }}</p>
-                            <p class="mb-0"><strong>Booking Date:</strong> {{ optional($booking->booking_date)->format('d M Y') }}</p>
+
+                            <p class="mb-0">
+                                <strong>Booking Date:</strong>
+                                {{ $booking->booking_date
+                                    ? \Carbon\Carbon::parse($booking->booking_date)->format('d M Y')
+                                    : 'N/A' }}
+                            </p>
+
+                            <p class="mb-0">
+                                <strong>Booking Time:</strong>
+                                @if ($booking->booking_start_at && $booking->booking_end_at)
+                                    {{ \Carbon\Carbon::parse($booking->booking_start_at)->format('h:i A') }}
+                                    -
+                                    {{ \Carbon\Carbon::parse($booking->booking_end_at)->format('h:i A') }}
+                                @else
+                                    <span class="text-muted">Time not set yet</span>
+                                @endif
+                            </p>
                         </div>
                     </div>
 
@@ -89,18 +106,17 @@
                                 @if ($booking->progress_status === 'completed')
                                     <span class="badge badge-success">Completed</span>
                                 @elseif($booking->progress_status === 'in_progress')
-                                    <span class="badge badge-info">In Progress</span>
+                                    <span class="badge badge-primary">In Progress</span>
                                 @elseif($booking->progress_status === 'rejected')
                                     <span class="badge badge-danger">Rejected</span>
                                 @else
-                                    <span class="badge badge-secondary">Pending</span>
+                                    <span class="badge badge-warning">Pending</span>
                                 @endif
                             </p>
 
                             <p class="mb-0">
                                 <strong>Created:</strong> {{ optional($booking->created_at)->format('d M Y, h:i A') }}
                             </p>
-
                         </div>
                     </div>
 
@@ -165,41 +181,7 @@
                         </form>
                     @endif
 
-                    <hr>
-                    <h6 class="font-weight-bold mb-2">Progress Actions</h6>
-
-                    <form action="{{ route('admin.booking.progress.update', $booking->id) }}" method="POST" class="mb-2">
-                        @csrf
-                        <input type="hidden" name="progress_status" value="pending">
-                        <button type="submit" class="btn btn-secondary btn-block" {{ $booking->status === 'cancelled' ? 'disabled' : '' }}>
-                            Mark Pending
-                        </button>
-                    </form>
-
-                    <form action="{{ route('admin.booking.progress.update', $booking->id) }}" method="POST" class="mb-2">
-                        @csrf
-                        <input type="hidden" name="progress_status" value="in_progress">
-                        <button type="submit" class="btn btn-info btn-block" {{ $booking->status === 'cancelled' ? 'disabled' : '' }}>
-                            Mark In Progress
-                        </button>
-                    </form>
-
-                    <form action="{{ route('admin.booking.progress.update', $booking->id) }}" method="POST" class="mb-2">
-                        @csrf
-                        <input type="hidden" name="progress_status" value="completed">
-                        <button type="submit" class="btn btn-success btn-block" {{ $booking->status === 'cancelled' ? 'disabled' : '' }}>
-                            Mark Completed
-                        </button>
-                    </form>
-
-                    <form action="{{ route('admin.booking.progress.update', $booking->id) }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="progress_status" value="rejected">
-                        <button type="submit" class="btn btn-danger btn-block" {{ $booking->status === 'cancelled' ? 'disabled' : '' }}>
-                            Mark Rejected
-                        </button>
-                    </form>
-
+                    {{-- ✅ Progress Status + Progress Actions removed এখান থেকে --}}
                 </div>
             </div>
 
